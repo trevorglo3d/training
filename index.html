@@ -48,7 +48,7 @@
       font-family: 'Inter', sans-serif;
     }
 
-    /* Fixed Glo3D Headline: No letter clipping */
+    /* Fixed Glo3D Headline */
     .glo-hero-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-weight: 800;
@@ -115,7 +115,7 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* Video Player Aspect Container */
+    /* Video Player Aspect Box */
     .video-aspect {
       position: relative;
       padding-bottom: 56.25%;
@@ -143,6 +143,26 @@
       max-height: 3800px;
       transition: max-height 0.6s ease-in-out;
     }
+
+    /* Search match highlighting & jump animation */
+    mark.search-highlight {
+      background-color: #fef08a;
+      color: #854d0e;
+      padding: 0 3px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    @keyframes targetGlowPulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(105, 54, 245, 0.6); }
+      50% { transform: scale(1.015); box-shadow: 0 0 0 14px rgba(105, 54, 245, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(105, 54, 245, 0); }
+    }
+    .highlight-target {
+      animation: targetGlowPulse 1.4s ease-in-out 2;
+      border-color: #6936f5 !important;
+      background-color: #faf5ff !important;
+    }
   </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col selection:bg-gloPurple-600 selection:text-white">
@@ -161,16 +181,25 @@
         </a>
       </div>
 
-      <!-- Quick Global Search Bar -->
-      <div class="relative hidden md:block w-72">
-        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
-        <input type="text" id="quickSearch" onkeyup="searchContent()" placeholder="Search all 30+ products, SOPs, rules..." 
-          class="w-full bg-slate-50 border border-slate-200 focus:border-gloPurple-600 rounded-full pl-9 pr-4 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none transition">
+      <!-- Universal Full-Text Search Engine -->
+      <div class="relative w-72 sm:w-96">
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5"></i>
+          <input type="text" id="quickSearch" oninput="executeUniversalSearch()" onfocus="executeUniversalSearch()" placeholder="Search any word across the entire website..." 
+            class="w-full bg-slate-50 border border-slate-200 focus:border-gloPurple-600 focus:bg-white rounded-full pl-10 pr-9 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none transition shadow-inner">
+          <button id="clearSearchBtn" onclick="clearUniversalSearch()" class="hidden absolute right-3 top-2 text-slate-400 hover:text-slate-600">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <!-- Live Instant Search Results Panel -->
+        <div id="searchDropdown" class="hidden absolute left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 max-h-[28rem] overflow-y-auto z-50 p-2 space-y-1.5 divide-y divide-slate-100">
+        </div>
       </div>
 
       <!-- Version Control HUD & Expandable Pricing Button -->
       <div class="flex items-center space-x-3">
-        <div class="relative group">
+        <div class="relative group hidden sm:block">
           <button class="flex items-center space-x-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-slate-800 transition">
             <i data-lucide="git-branch" class="w-3.5 h-3.5 text-gloPurple-600"></i>
             <span>BUILD: <b class="text-gloPurple-600">v0.2</b></span>
@@ -182,7 +211,7 @@
               <div class="flex items-center justify-between p-2 rounded-lg bg-gloPurple-50 border border-gloPurple-200 text-xs text-slate-900">
                 <div>
                   <div class="font-bold text-gloPurple-600 font-mono">v0.2 (Active)</div>
-                  <div class="text-[10px] text-slate-500">Official Brand Assets + Tech Specs</div>
+                  <div class="text-[10px] text-slate-500">Clean Production Build</div>
                 </div>
                 <i data-lucide="check" class="w-4 h-4 text-gloPurple-600"></i>
               </div>
@@ -212,7 +241,6 @@
         <span>Official Sales Training Playbook & Complete Product Specifications</span>
       </div>
 
-      <!-- Clean Typography Headline (No Clipping) -->
       <div>
         <h1 class="glo-hero-title text-4xl sm:text-5xl md:text-6xl tracking-tight">
           All-in-One<br>Digital Marketing
@@ -220,10 +248,9 @@
       </div>
 
       <p class="text-slate-600 text-sm sm:text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-        Revolutionize your dealership's digital marketing with AI-driven solutions in <b class="text-slate-900">Digital Merchandising</b>, <b class="text-slate-900">Omni Channel AI Employees</b>, <b class="text-slate-900">Local SEO</b>, <b class="text-slate-900">Social Media Marketing</b>, <b class="text-slate-900">Video Marketing</b>, <b class="text-slate-900">Lead Magnets</b>, and <b class="text-slate-900">Paid Ads Management</b>[cite: 1].
+        Revolutionize your dealership's digital marketing with AI-driven solutions in <b class="text-slate-900">Digital Merchandising</b>, <b class="text-slate-900">Omni Channel AI Employees</b>, <b class="text-slate-900">Local SEO</b>, <b class="text-slate-900">Social Media Marketing</b>, <b class="text-slate-900">Video Marketing</b>, <b class="text-slate-900">Lead Magnets</b>, and <b class="text-slate-900">Paid Ads Management</b>.
       </p>
 
-      <!-- Quick Navigation Anchors -->
       <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
         <a href="#ch1" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-gloPurple-500 text-xs font-semibold text-slate-700 shadow-sm transition">1. Industry Knowledge</a>
         <a href="#ch2" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-gloPurple-500 text-xs font-semibold text-slate-700 shadow-sm transition">2. Culture & Rules</a>
@@ -246,7 +273,7 @@
           </div>
           <div>
             <h3 class="font-bold text-base text-slate-900 font-['Plus_Jakarta_Sans']">Modular Pricing & À La Carte Subscription Matrix</h3>
-            <p class="text-xs text-slate-500">Click to expand or collapse the official product pricing table, discounted bundles, and inventory limit tiers[cite: 1].</p>
+            <p class="text-xs text-slate-500">Click to expand or collapse the official product pricing table, discounted bundles, and inventory limit tiers.</p>
           </div>
         </div>
         <div class="flex items-center space-x-2 text-xs font-bold text-gloPurple-600">
@@ -255,13 +282,12 @@
         </div>
       </button>
 
-      <!-- Collapsible Grid Content -->
       <div id="pricingAccordionContent" class="collapsible-content">
         <div class="p-6 bg-slate-50/50 space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
 
             <!-- Category 1: Digital Merchandising -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="searchable-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-category="Pricing: Digital Merchandising">
               <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs flex justify-between items-center">
                 <span>1. Digital Merchandising</span>
                 <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded">Core Merchandising</span>
@@ -279,7 +305,7 @@
             </div>
 
             <!-- Category 2: Omni Channel AI Employee -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="searchable-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-category="Pricing: AI Employees">
               <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs flex justify-between items-center">
                 <span>2. Omni Channel AI Employee</span>
                 <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded">24/7 Automation</span>
@@ -297,7 +323,7 @@
 
             <!-- Category 3 & 4: Paid Ads & Video Marketing -->
             <div class="space-y-4">
-              <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="searchable-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-category="Pricing: Paid Ads">
                 <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs flex justify-between items-center">
                   <span>3. Paid Ads Management</span>
                 </div>
@@ -305,7 +331,7 @@
                   <div class="p-3 flex justify-between">
                     <div>
                       <div>Paid Ads Growth (Full Service)</div>
-                      <div class="text-[10px] text-slate-400">$350 Setup + 10% Ad Spend[cite: 1]</div>
+                      <div class="text-[10px] text-slate-400">$350 Setup + 10% Ad Spend</div>
                     </div>
                     <b class="text-slate-900">$399.00</b>
                   </div>
@@ -313,14 +339,14 @@
                   <div class="p-3 flex justify-between">
                     <div>
                       <div>Paid Ads Scale (Unlimited)</div>
-                      <div class="text-[10px] text-slate-400">$350 Setup + 10% Ad Spend[cite: 1]</div>
+                      <div class="text-[10px] text-slate-400">$350 Setup + 10% Ad Spend</div>
                     </div>
                     <b class="text-slate-900">$699.00</b>
                   </div>
                   <div class="p-3 flex justify-between">
                     <div>
                       <div>Google Shopping</div>
-                      <div class="text-[10px] text-slate-400">$150 Setup + 10% Ad Spend[cite: 1]</div>
+                      <div class="text-[10px] text-slate-400">$150 Setup + 10% Ad Spend</div>
                     </div>
                     <b class="text-slate-900">$399.00</b>
                   </div>
@@ -329,7 +355,7 @@
                 </div>
               </div>
 
-              <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="searchable-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-category="Pricing: Video Marketing">
                 <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs">4. Video Marketing</div>
                 <div class="divide-y divide-slate-100 text-xs">
                   <div class="p-3 flex justify-between"><span>Inventory Video Tour</span><b class="text-slate-900">$199.00</b></div>
@@ -341,7 +367,7 @@
             </div>
 
             <!-- Category 5: Local SEO -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="searchable-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-category="Pricing: Local SEO">
               <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs">5. Local SEO</div>
               <div class="divide-y divide-slate-100 text-xs">
                 <div class="p-3 flex justify-between"><span>Google Profile Listing (500+ Backlinks)</span><b class="text-slate-900">$49.00</b></div>
@@ -350,7 +376,7 @@
             </div>
 
             <!-- Category 6: Social Media Marketing -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="searchable-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-category="Pricing: Social Media">
               <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs">6. Social Media Marketing</div>
               <div class="divide-y divide-slate-100 text-xs">
                 <div class="p-3 flex justify-between"><span>Facebook Marketplace Auto-Post</span><b class="text-slate-900">$149.00</b></div>
@@ -360,7 +386,7 @@
 
             <!-- Category 7: Lead Magnets & Bundles -->
             <div class="space-y-4">
-              <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="searchable-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-category="Pricing: Lead Magnets">
                 <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs">7. Lead Magnets Suite</div>
                 <div class="p-3 flex justify-between text-xs">
                   <span>Get Trade-In Value / Price Advisor / CARFAX / Video</span>
@@ -369,7 +395,7 @@
               </div>
 
               <!-- Official Discounted Bundles -->
-              <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="searchable-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-category="Pricing: Bundles">
                 <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs flex justify-between items-center">
                   <span>Official Discounted Bundles</span>
                   <span class="text-[10px] bg-emerald-400 text-slate-900 font-bold px-2 py-0.5 rounded">High Value</span>
@@ -382,9 +408,9 @@
                 </div>
               </div>
 
-              <div class="p-3 bg-white rounded-xl border border-slate-200 text-xs flex justify-between items-center">
-                <span>Sub-Users Access: <b>$20.00 / user / mo</b>[cite: 1]</span>
-                <span class="text-emerald-600 font-bold">1–200 Units Included ($0.00)[cite: 1]</span>
+              <div class="searchable-card p-3 bg-white rounded-xl border border-slate-200 text-xs flex justify-between items-center" data-category="Pricing: Subusers">
+                <span>Sub-Users Access: <b>$20.00 / user / mo</b></span>
+                <span class="text-emerald-600 font-bold">1–200 Units Included ($0.00)</span>
               </div>
             </div>
 
@@ -407,11 +433,11 @@
         <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
           The Automotive Industry Lifecycle & Dealership Software Stack
         </h2>
-        <p class="text-sm text-slate-500 mt-1">Understanding the fundamental lifecycle of vehicles, market players, and how Glo3D integrates within dealership software ecosystems[cite: 1].</p>
+        <p class="text-sm text-slate-500 mt-1">Understanding the fundamental lifecycle of vehicles, market players, and how Glo3D integrates within dealership software ecosystems.</p>
       </div>
 
       <!-- Section 1-1 -->
-      <div class="space-y-4">
+      <div id="card-ep-1-1" class="searchable-card space-y-4" data-category="Chapter 1: Industry Knowledge" data-video="BYAXOk9VqQA">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <h3 class="font-bold text-lg text-slate-900 flex items-center space-x-2">
             <span class="w-2 h-2 rounded-full bg-gloPurple-600"></span>
@@ -427,28 +453,28 @@
           <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
             <h4 class="font-bold text-slate-900 text-sm">Key Players & Terminology</h4>
             <ul class="space-y-1.5 list-disc list-inside">
-              <li><strong class="text-slate-800"><span class="term-keyword">OEM<span class="term-tooltip"><b>Original Equipment Manufacturer:</b> The primary manufacturing company that builds vehicles (e.g., Toyota, GM, Ford)[cite: 1].</span></span> (Original Equipment Manufacturer):</strong> The company that manufactures the car[cite: 1].</li>
-              <li><strong class="text-slate-800">Certified / Franchise Dealers:</strong> Authorized by OEMs to sell brand-new cars; split into New Car and Used Car departments[cite: 1].</li>
-              <li><strong class="text-slate-800">Independent Car Dealers:</strong> Not affiliated with any specific brand; sell strictly used cars acquired through auto auctions or customer trade-ins[cite: 1].</li>
-              <li><strong class="text-slate-800"><span class="term-keyword">BHPH<span class="term-tooltip"><b>Buy Here Pay Here:</b> Independent dealers specializing in subprime financing without external third-party lenders[cite: 1].</span></span> (Buy Here Pay Here):</strong> Specializes in buyers with bad credit, offering lower-quality cars and handling financing/leasing in-house[cite: 1].</li>
+              <li><strong class="text-slate-800"><span class="term-keyword">OEM<span class="term-tooltip"><b>Original Equipment Manufacturer:</b> The primary manufacturing company that builds vehicles (e.g., Toyota, GM, Ford).</span></span> (Original Equipment Manufacturer):</strong> The company that manufactures the car.</li>
+              <li><strong class="text-slate-800">Certified / Franchise Dealers:</strong> Authorized by OEMs to sell brand-new cars; split into New Car and Used Car departments.</li>
+              <li><strong class="text-slate-800">Independent Car Dealers:</strong> Not affiliated with any specific brand; sell strictly used cars acquired through auto auctions or customer trade-ins.</li>
+              <li><strong class="text-slate-800"><span class="term-keyword">BHPH<span class="term-tooltip"><b>Buy Here Pay Here:</b> Independent dealers specializing in subprime financing without external third-party lenders.</span></span> (Buy Here Pay Here):</strong> Specializes in buyers with bad credit, offering lower-quality cars and handling financing/leasing in-house.</li>
             </ul>
           </div>
 
           <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
             <h4 class="font-bold text-slate-900 text-sm">The 5 Stages of the Car Life Cycle</h4>
             <ol class="space-y-1.5 list-decimal list-inside">
-              <li><strong>Manufacturing:</strong> The OEM produces the car[cite: 1].</li>
-              <li><strong>Initial Sale:</strong> The car is sent to a Certified/Franchise Dealer[cite: 1].</li>
-              <li><strong>Consumer Acquisition:</strong> Consumers acquire via Lease (finance company owns vehicle), Finance (ownership upon payoff), or Full Cash Payoff[cite: 1].</li>
-              <li><strong>End of Lease / Ownership:</strong> Consumer buyout, dealer repurchase, or transfer to wholesale Dealer Auctions where independent dealers acquire units[cite: 1].</li>
-              <li><strong>Trade-in / Resale:</strong> Resold via Independent lots or Certified Used departments[cite: 1].</li>
+              <li><strong>Manufacturing:</strong> The OEM produces the car.</li>
+              <li><strong>Initial Sale:</strong> The car is sent to a Certified/Franchise Dealer.</li>
+              <li><strong>Consumer Acquisition:</strong> Consumers acquire via Lease (finance company owns vehicle), Finance (ownership upon payoff), or Full Cash Payoff.</li>
+              <li><strong>End of Lease / Ownership:</strong> Consumer buyout, dealer repurchase, or transfer to wholesale Dealer Auctions where independent dealers acquire units.</li>
+              <li><strong>Trade-in / Resale:</strong> Resold via Independent lots or Certified Used departments.</li>
             </ol>
           </div>
         </div>
       </div>
 
       <!-- Section 1-2 & 1-3 -->
-      <div class="space-y-4 pt-4 border-t border-slate-100">
+      <div id="card-ep-1-2" class="searchable-card space-y-4 pt-4 border-t border-slate-100" data-category="Chapter 1: Tech Stack" data-video="MpxWEwyFiVA">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <h3 class="font-bold text-lg text-slate-900 flex items-center space-x-2">
             <span class="w-2 h-2 rounded-full bg-gloPurple-600"></span>
@@ -475,19 +501,19 @@
             </thead>
             <tbody class="divide-y divide-slate-200 text-slate-600">
               <tr class="hover:bg-slate-50">
-                <td class="p-3 font-bold text-slate-900"><span class="term-keyword">DMS<span class="term-tooltip"><b>Dealer Management System:</b> Accounting operating system tracking inventory financial records (e.g. CDK, DealerTrack, Reynolds)[cite: 1].</span></span> (Dealer Management System)</td>
-                <td class="p-3">Accounting software tracking all vehicles bought, sold, serviced, and titled for long-term historical records[cite: 1].</td>
-                <td class="p-3">Pulls vehicle inventory data smoothly to keep listing data synced[cite: 1].</td>
+                <td class="p-3 font-bold text-slate-900"><span class="term-keyword">DMS<span class="term-tooltip"><b>Dealer Management System:</b> Accounting operating system tracking inventory financial records (e.g. CDK, DealerTrack, Reynolds).</span></span> (Dealer Management System)</td>
+                <td class="p-3">Accounting software tracking all vehicles bought, sold, serviced, and titled for long-term historical records.</td>
+                <td class="p-3">Pulls vehicle inventory data smoothly to keep listing data synced.</td>
               </tr>
               <tr class="hover:bg-slate-50">
-                <td class="p-3 font-bold text-slate-900"><span class="term-keyword">IMS<span class="term-tooltip"><b>Inventory Management System:</b> Content hub broadcasting photos and spins to AutoTrader, CarGurus, and dealer websites[cite: 1].</span></span> (Inventory Management System)</td>
-                <td class="p-3">Media hub for currently available cars, broadcasting photos and videos to websites and 3rd-party marketplaces[cite: 1].</td>
-                <td class="p-3">Content generated via mobile app is sent back to the IMS, with embeddable 360 spin scripts added to the dealer site[cite: 1].</td>
+                <td class="p-3 font-bold text-slate-900"><span class="term-keyword">IMS<span class="term-tooltip"><b>Inventory Management System:</b> Content hub broadcasting photos and spins to AutoTrader, CarGurus, and dealer websites.</span></span> (Inventory Management System)</td>
+                <td class="p-3">Media hub for currently available cars, broadcasting photos and videos to websites and 3rd-party marketplaces.</td>
+                <td class="p-3">Content generated via mobile app is sent back to the IMS, with embeddable 360 spin scripts added to the dealer site.</td>
               </tr>
               <tr class="hover:bg-slate-50">
-                <td class="p-3 font-bold text-slate-900"><span class="term-keyword">CRM<span class="term-tooltip"><b>Customer Relationship Management:</b> Lead logging software. Glo3D warms leads with AI and forwards them via ADF XML format[cite: 1].</span></span> (Customer Relationship Management)</td>
-                <td class="p-3">Logs website and marketplace leads, assigns reps, and tracks customer follow-ups[cite: 1].</td>
-                <td class="p-3">Warms up leads with text/email AI follow-up before sending data to CRM in standard ADF format[cite: 1].</td>
+                <td class="p-3 font-bold text-slate-900"><span class="term-keyword">CRM<span class="term-tooltip"><b>Customer Relationship Management:</b> Lead logging software. Glo3D warms leads with AI and forwards them via ADF XML format.</span></span> (Customer Relationship Management)</td>
+                <td class="p-3">Logs website and marketplace leads, assigns reps, and tracks customer follow-ups.</td>
+                <td class="p-3">Warms up leads with text/email AI follow-up before sending data to CRM in standard ADF format.</td>
               </tr>
             </tbody>
           </table>
@@ -505,35 +531,35 @@
         <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
           Glo3D Culture, ICP & Internal Sales Floor Laws
         </h2>
-        <p class="text-sm text-slate-500 mt-1">High-performance sports team mindset, target customer economics, and strict floor policies[cite: 1].</p>
+        <p class="text-sm text-slate-500 mt-1">High-performance sports team mindset, target customer economics, and strict floor policies.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed">
-        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+        <div id="card-ep-2-1" class="searchable-card p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between" data-category="Chapter 2: Culture" data-video="CqYreJ0KQzQ">
           <div class="space-y-2">
             <h3 class="font-bold text-base text-slate-900">Championship Sports Team Culture</h3>
-            <p class="text-slate-600">We operate like a championship sports team, not a traditional family[cite: 1]. Every rep is expected to be a world-class player bringing radical candor, continuous self-learning, obsessive customer care, and upward accountability[cite: 1].</p>
+            <p class="text-slate-600">We operate like a championship sports team, not a traditional family. Every rep is expected to be a world-class player bringing radical candor, continuous self-learning, obsessive customer care, and upward accountability.</p>
           </div>
           <button onclick="openCinema('CqYreJ0KQzQ', 'Episode 2-1: Glo3D Culture')" class="w-full py-2 rounded-lg bg-white border border-slate-200 hover:bg-gloPurple-50 text-gloPurple-700 font-semibold transition flex items-center justify-center space-x-1">
             <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i><span>Watch Culture Video (CqYreJ0KQzQ)</span>
           </button>
         </div>
 
-        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+        <div id="card-ep-2-2" class="searchable-card p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between" data-category="Chapter 2: ICP Targeting" data-video="buT2_7znhyI">
           <div class="space-y-2">
             <h3 class="font-bold text-base text-slate-900">Ideal Customer Profile (50–200 Units)</h3>
-            <p class="text-slate-600">Our target market is independent and franchise dealers with 50 to 200 vehicles[cite: 1]. Glo3D allows them to compete against 1,000-car mega-dealers by providing automated marketing replacing expensive agency staff[cite: 1].</p>
+            <p class="text-slate-600">Our target market is independent and franchise dealers with 50 to 200 vehicles. Glo3D allows them to compete against 1,000-car mega-dealers by providing automated marketing replacing expensive agency staff.</p>
           </div>
           <button onclick="openCinema('buT2_7znhyI', 'Episode 2-2: Glo3D Solutions Overview')" class="w-full py-2 rounded-lg bg-white border border-slate-200 hover:bg-gloPurple-50 text-gloPurple-700 font-semibold transition flex items-center justify-center space-x-1">
             <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i><span>Watch Overview Video (buT2_7znhyI)</span>
           </button>
         </div>
 
-        <div class="p-5 rounded-xl border-l-4 border-l-rose-500 bg-rose-50/50 border border-slate-200 space-y-3 flex flex-col justify-between">
+        <div id="card-ep-2-3" class="searchable-card p-5 rounded-xl border-l-4 border-l-rose-500 bg-rose-50/50 border border-slate-200 space-y-3 flex flex-col justify-between" data-category="Chapter 2: Policy Document">
           <div class="space-y-2">
             <span class="text-[10px] font-bold text-rose-700 uppercase font-mono">EPISODE 2-3 // DOCUMENT</span>
             <h3 class="font-bold text-base text-slate-900">Sales Floor Rules & Policies</h3>
-            <p class="text-slate-600">Strict rules on the 21-day HubSpot callback period, $800 weekly Leadpool baseline, credit card handling, and cancellation protocols[cite: 1].</p>
+            <p class="text-slate-600">Strict rules on the 21-day HubSpot callback period, $800 weekly Leadpool baseline, credit card handling, and cancellation protocols.</p>
           </div>
           <a href="https://docs.google.com/document/d/1-ZVDwsgRU8DlrFiAD2m8soSFtUoTDvtyUWkg4qfBnuE/edit?usp=sharing" target="_blank" class="w-full py-2 rounded-lg bg-white border border-rose-200 hover:bg-rose-100 text-rose-700 font-semibold transition flex items-center justify-center space-x-1">
             <i data-lucide="file-text" class="w-3.5 h-3.5"></i><span>Open Official Doc</span>
@@ -542,21 +568,21 @@
       </div>
 
       <!-- Detailed Sales Floor Rules Box -->
-      <div class="p-5 rounded-xl bg-slate-900 text-slate-200 text-xs space-y-3">
+      <div id="card-floor-rules" class="searchable-card p-5 rounded-xl bg-slate-900 text-slate-200 text-xs space-y-3" data-category="Chapter 2: Floor Laws">
         <h4 class="font-bold text-white text-sm flex items-center space-x-2">
           <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
           <span>Non-Negotiable Floor Rules Summary</span>
         </h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 leading-relaxed">
           <ul class="space-y-1.5 list-disc list-inside">
-            <li><strong>The 21-Day Rule:</strong> If an account status is EMPTY, check notes. If the note is under 21 days old, you <b>CANNOT</b> call[cite: 1]. If over 21 days, you may call unless a specific future callback date was logged[cite: 1].</li>
-            <li><strong>Leadpool Eligibility:</strong> Reps must generate $800/week to enter the pool rotation[cite: 1]. Late or absent reps skip their turn[cite: 1].</li>
-            <li><strong>Screen Sign-Ups Only:</strong> All sign-ups must be executed on the dealer's screen[cite: 1]. <b>Never take credit card info over the phone[cite: 1].</b></li>
+            <li><strong>The 21-Day Rule:</strong> If an account status is EMPTY, check notes. If the note is under 21 days old, you <b>CANNOT</b> call. If over 21 days, you may call unless a specific future callback date was logged.</li>
+            <li><strong>Leadpool Eligibility:</strong> Reps must generate $800/week to enter the pool rotation. Late or absent reps skip their turn.</li>
+            <li><strong>Screen Sign-Ups Only:</strong> All sign-ups must be executed on the dealer's screen. <b>Never take credit card info over the phone.</b></li>
           </ul>
           <ul class="space-y-1.5 list-disc list-inside">
-            <li><strong>Zero Retention Policy:</strong> All cancellations must be transferred immediately to <b>Kim</b>[cite: 1]. No retention attempts allowed under any circumstances[cite: 1].</li>
-            <li><strong>Cancelled Accounts:</strong> Strict 30-day waiting period from cancellation date before an account can be contacted[cite: 1].</li>
-            <li><strong>Commission Clawbacks:</strong> Overpromising features or unauthorized pricing discounts results in sale withdrawal and commission reversal[cite: 1].</li>
+            <li><strong>Zero Retention Policy:</strong> All cancellations must be transferred immediately to <b>Kim</b>. No retention attempts allowed under any circumstances.</li>
+            <li><strong>Cancelled Accounts:</strong> Strict 30-day waiting period from cancellation date before an account can be contacted.</li>
+            <li><strong>Commission Clawbacks:</strong> Overpromising features or unauthorized pricing discounts results in sale withdrawal and commission reversal.</li>
           </ul>
         </div>
       </div>
@@ -572,15 +598,15 @@
         <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
           Sales Infrastructure & Operating Stack
         </h2>
-        <p class="text-sm text-slate-500 mt-1">Mastering HubSpot CRM workflows, Zoom Phone demo compliance, G-Suite email templates, and PIA VPN configurations[cite: 1].</p>
+        <p class="text-sm text-slate-500 mt-1">Mastering HubSpot CRM workflows, Zoom Phone demo compliance, G-Suite email templates, and PIA VPN configurations.</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3">
+        <div id="card-ep-3-1" class="searchable-card p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3" data-category="Chapter 3: HubSpot">
           <div class="space-y-2">
             <span class="font-mono font-bold text-gloPurple-600">EPISODE 3-1</span>
             <h4 class="font-bold text-slate-900 text-sm">HubSpot Workflow</h4>
-            <p class="text-slate-600">Prioritizing the Tasks queue over the Contacts list; logging notes on Contact records only to protect work under the 21-day rule[cite: 1].</p>
+            <p class="text-slate-600">Prioritizing the Tasks queue over the Contacts list; logging notes on Contact records only to protect work under the 21-day rule.</p>
             <div class="p-2 rounded bg-slate-200 font-mono text-[11px] text-slate-800">
               Passcode: <b class="text-gloPurple-700 select-all">ADK0ZW</b>
             </div>
@@ -590,33 +616,33 @@
           </a>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3">
+        <div id="card-ep-3-2" class="searchable-card p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3" data-category="Chapter 3: Zoom" data-video="QQmr9kyVx_A">
           <div class="space-y-2">
             <span class="font-mono font-bold text-gloPurple-600">EPISODE 3-2</span>
             <h4 class="font-bold text-slate-900 text-sm">Zoom Phone & Demos</h4>
-            <p class="text-slate-600">Caller ID setup, recording QA compliance, live screen share demo rooms, and SMS messaging with prospects[cite: 1].</p>
+            <p class="text-slate-600">Caller ID setup, recording QA compliance, live screen share demo rooms, and SMS messaging with prospects.</p>
           </div>
           <button onclick="openCinema('QQmr9kyVx_A', 'Episode 3-2: Zoom')" class="w-full py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 font-semibold transition">
             Watch Video (QQmr9kyVx_A)
           </button>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3">
+        <div id="card-ep-3-3" class="searchable-card p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3" data-category="Chapter 3: G-Suite" data-video="70E5RLZ36jg">
           <div class="space-y-2">
             <span class="font-mono font-bold text-gloPurple-600">EPISODE 3-3</span>
             <h4 class="font-bold text-slate-900 text-sm">Google G-Suite</h4>
-            <p class="text-slate-600">Setting up standardized professional email signatures, rapid-response templates, and Google Chat collaboration spaces[cite: 1].</p>
+            <p class="text-slate-600">Setting up standardized professional email signatures, rapid-response templates, and Google Chat collaboration spaces.</p>
           </div>
           <button onclick="openCinema('70E5RLZ36jg', 'Episode 3-3: Google G-Suite')" class="w-full py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 font-semibold transition">
             Watch Video (70E5RLZ36jg)
           </button>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3">
+        <div id="card-ep-3-4" class="searchable-card p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3" data-category="Chapter 3: VPN" data-video="MX-Qbxv7TFQ">
           <div class="space-y-2">
             <span class="font-mono font-bold text-gloPurple-600">EPISODE 3-4</span>
             <h4 class="font-bold text-slate-900 text-sm">PIA VPN Tools</h4>
-            <p class="text-slate-600">Connecting to the Private Internet Access desktop application on <b>United States East</b> to bypass region-blocked dealer sites[cite: 1].</p>
+            <p class="text-slate-600">Connecting to the Private Internet Access desktop application on <b>United States East</b> to bypass region-blocked dealer sites.</p>
           </div>
           <button onclick="openCinema('MX-Qbxv7TFQ', 'Episode 3-4: VPN Tools')" class="w-full py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 font-semibold transition">
             Watch Video (MX-Qbxv7TFQ)
@@ -635,7 +661,7 @@
         <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
           In-Depth Product Technical & Operational Specifications
         </h2>
-        <p class="text-sm text-slate-500 mt-1">Complete technical manual for all services organized across the 7 main marketing categories[cite: 1].</p>
+        <p class="text-sm text-slate-500 mt-1">Complete technical manual for all services organized across the 7 main marketing categories.</p>
       </div>
 
       <!-- CATEGORY 1: DIGITAL MERCHANDISING -->
@@ -650,14 +676,14 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-slate-600">
           <!-- Basic Setup & Overview -->
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-1" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 1: Basic Setup & Overview" data-video="pqYA5IcsG7A">
             <h4 class="font-bold text-slate-900 text-sm">Basic System Setup & Digital Merchandising Overview</h4>
-            <p><strong>Two Platforms:</strong> Web App (glow3d.net) for setup/account management and Mobile App exclusively for vehicle media capture[cite: 1].</p>
+            <p><strong>Two Platforms:</strong> Web App (glow3d.net) for setup/account management and Mobile App exclusively for vehicle media capture.</p>
             <ul class="space-y-1 list-disc list-inside">
-              <li><strong>Display Profile (My Account):</strong> Crucial customer-facing display data (logo, name, address)[cite: 1]. Upscale low-res logos using the built-in <b>Image Upscaler</b>[cite: 1].</li>
-              <li><strong>Capture Aspect Ratio:</strong> Must be set <i>before</i> capturing any vehicle (e.g. 16:9, 3:2, or 4:3) to match the dealer's website[cite: 1].</li>
-              <li><strong>Default Backlink:</strong> Set primary source to <b>Vehicle Detail Page (VDP)</b> and secondary to static dealer homepage to guarantee backlinks from all social shares[cite: 1].</li>
-              <li><strong>Resolution & Archiving:</strong> Capture resolution defaults to <b>2K</b>; archive setting defaults to <i>Auto archive sold cars</i>[cite: 1].</li>
+              <li><strong>Display Profile (My Account):</strong> Crucial customer-facing display data (logo, name, address). Upscale low-res logos using the built-in <b>Image Upscaler</b>.</li>
+              <li><strong>Capture Aspect Ratio:</strong> Must be set <i>before</i> capturing any vehicle (e.g. 16:9, 3:2, or 4:3) to match the dealer's website.</li>
+              <li><strong>Default Backlink:</strong> Set primary source to <b>Vehicle Detail Page (VDP)</b> and secondary to static dealer homepage to guarantee backlinks from all social shares.</li>
+              <li><strong>Resolution & Archiving:</strong> Capture resolution defaults to <b>2K</b>; archive setting defaults to <i>Auto archive sold cars</i>.</li>
             </ul>
             <div class="pt-2 flex flex-wrap gap-2">
               <button onclick="openCinema('pqYA5IcsG7A', 'Ep 4-1: Basic System Setup')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1 Setup Video</button>
@@ -666,14 +692,14 @@
           </div>
 
           <!-- DM Settings Part 1 & 2 -->
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-1-2" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 1: DM Settings" data-video="0lpj9rwyltY">
             <h4 class="font-bold text-slate-900 text-sm">DM Settings & Customer Skill Adaptation</h4>
-            <p><strong>Skill Level Adaptation:</strong> "Bicycle customers" (smaller lots) need simple workflows; "Ferrari customers" (dedicated photographers) can use advanced modes[cite: 1].</p>
+            <p><strong>Skill Level Adaptation:</strong> "Bicycle customers" (smaller lots) need simple workflows; "Ferrari customers" (dedicated photographers) can use advanced modes.</p>
             <ul class="space-y-1 list-disc list-inside">
-              <li><strong>Smart Camera Mode:</strong> Recommended default; automatically balances standard and wide-angle lenses for a natural look without distortion[cite: 1].</li>
-              <li><strong>Plate Blurring & Left/Right Drive:</strong> License plate blurring defaults OFF (consumes extra resources)[cite: 1]. Left-hand drive is North American default[cite: 1].</li>
-              <li><strong>Gallery Styles:</strong> <b>Classic Gallery</b> (traditional thumbnail strip) vs. <b>Nova Gallery</b> (modern floating UI)[cite: 1]. Color match themes using the <b>ColorZilla</b> Chrome extension[cite: 1].</li>
-              <li><strong>Promotional Photos:</strong> Insert marketing slides every 3 photos; avoid placing them as the very first image[cite: 1].</li>
+              <li><strong>Smart Camera Mode:</strong> Recommended default; automatically balances standard and wide-angle lenses for a natural look without distortion.</li>
+              <li><strong>Plate Blurring & Left/Right Drive:</strong> License plate blurring defaults OFF (consumes extra resources). Left-hand drive is North American default.</li>
+              <li><strong>Gallery Styles:</strong> <b>Classic Gallery</b> (traditional thumbnail strip) vs. <b>Nova Gallery</b> (modern floating UI). Color match themes using the <b>ColorZilla</b> Chrome extension.</li>
+              <li><strong>Promotional Photos:</strong> Insert marketing slides every 3 photos; avoid placing them as the very first image.</li>
             </ul>
             <div class="pt-2 flex flex-wrap gap-2">
               <button onclick="openCinema('0lpj9rwyltY', 'Ep 4-1-2: DM Setting - Part 1')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-2 DM Part 1</button>
@@ -682,14 +708,14 @@
           </div>
 
           <!-- Guided Photography SOP -->
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-1-7" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 1: Guided Photography" data-video="0rccmxQ2kS0">
             <h4 class="font-bold text-slate-900 text-sm">Guided Photography Standard Operating Procedure</h4>
-            <p>Captures standardized vehicle galleries in under 5 minutes with automated AI processing[cite: 1]:</p>
+            <p>Captures standardized vehicle galleries in under 5 minutes with automated AI processing:</p>
             <ul class="space-y-1 list-disc list-inside">
-              <li><strong>Phase 1: Exterior Money Shots</strong> — 8 standard angles starting from passenger side at door-handle height with green on-screen guides[cite: 1].</li>
-              <li><strong>Phase 2: Close-Ups & Open Doors</strong> — Switch to Ultra-Wide lens for driver door, rear door, and mirror close-ups[cite: 1].</li>
-              <li><strong>Phase 3: Interior Shots</strong> — Sit in the <b>back seat</b> with Ultra-Wide lens for dashboard and center console; move to front for steering wheel controls[cite: 1].</li>
-              <li><strong>Phase 4: Save & AI Processing</strong> — Wait for upload to hit 100%; AI removes background, generates video tour with voiceover, adds promotional overlays, and syndicates to website and IMS[cite: 1].</li>
+              <li><strong>Phase 1: Exterior Money Shots</strong> — 8 standard angles starting from passenger side at door-handle height with green on-screen guides.</li>
+              <li><strong>Phase 2: Close-Ups & Open Doors</strong> — Switch to Ultra-Wide lens for driver door, rear door, and mirror close-ups.</li>
+              <li><strong>Phase 3: Interior Shots</strong> — Sit in the <b>back seat</b> with Ultra-Wide lens for dashboard and center console; move to front for steering wheel controls.</li>
+              <li><strong>Phase 4: Save & AI Processing</strong> — Wait for upload to hit 100%; AI removes background, generates video tour with voiceover, adds promotional overlays, and syndicates to website and IMS.</li>
             </ul>
             <button onclick="openCinema('0rccmxQ2kS0', 'Ep 4-1-7: Guided Photography')" class="w-full py-1.5 rounded bg-gloPurple-50 hover:bg-gloPurple-100 text-gloPurple-700 font-semibold transition border border-gloPurple-200">
               Watch Ep 4-1-7 Guided Photography SOP (0rccmxQ2kS0)
@@ -697,10 +723,10 @@
           </div>
 
           <!-- Standard vs Advanced Custom Backgrounds -->
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-1-5" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 1: Background Removal" data-video="kLWlDVL6xw8">
             <h4 class="font-bold text-slate-900 text-sm">Standard vs. AI Advanced Background Removal</h4>
-            <p><strong>Standard Background:</strong> Replaces background with one virtual setting[cite: 1]. Turntable should be <b>unchecked</b> for gallery photos (maximizes car size) and <b>checked</b> for 360 spin[cite: 1].</p>
-            <p><strong>AI Advanced Background (2026 Engine):</strong> Gen-AI engine with Left/Center/Right multi-perspective backgrounds, auto-relighting to prevent shadow color cast, clean white Search Results Page (SRP) thumbnails, and High-Point vs. Low-Point sports car camera modes[cite: 1].</p>
+            <p><strong>Standard Background:</strong> Replaces background with one virtual setting. Turntable should be <b>unchecked</b> for gallery photos (maximizes car size) and <b>checked</b> for 360 spin.</p>
+            <p><strong>AI Advanced Background (2026 Engine):</strong> Gen-AI engine with Left/Center/Right multi-perspective backgrounds, auto-relighting to prevent shadow color cast, clean white Search Results Page (SRP) thumbnails, and High-Point vs. Low-Point sports car camera modes.</p>
             <div class="pt-2 flex flex-wrap gap-2">
               <button onclick="openCinema('kLWlDVL6xw8', 'Ep 4-1-5: AI Background Removal for Car Photography in 2026')" class="px-2.5 py-1 rounded bg-gloPurple-600 text-white font-semibold hover:bg-gloPurple-700">Ep 4-1-5 AI Background 2026</button>
               <button onclick="openCinema('S1VzRIZerXk', 'Ep 4-1-4: Custom Background')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-4 Standard</button>
@@ -708,10 +734,10 @@
           </div>
 
           <!-- 360 Spins & Interior Panoramic -->
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-1-8" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 1: 360 Spins & Panoramas" data-video="zHTUuig3zuk">
             <h4 class="font-bold text-slate-900 text-sm">360 Exterior Spins & Interior Panoramic Photography</h4>
-            <p><strong>Exterior 360 Capture:</strong> 16 frames recommended for smooth spins (8 frames for max speed)[cite: 1]. Use Standard Lens from 5 steps away; voice control enables hands-free shooting in cold weather[cite: 1].</p>
-            <p><strong>360 Interior Panoramic:</strong> Direct connection to Insta360 (default universal password <code class="bg-slate-200 px-1 rounded">88888888</code>) and Ricoh Theta[cite: 1]. Camera brand face must point to the front of the car; place on a monopod at <b>eye level</b> over the center console[cite: 1].</p>
+            <p><strong>Exterior 360 Capture:</strong> 16 frames recommended for smooth spins (8 frames for max speed). Use Standard Lens from 5 steps away; voice control enables hands-free shooting in cold weather.</p>
+            <p><strong>360 Interior Panoramic:</strong> Direct connection to Insta360 (default universal password <code class="bg-slate-200 px-1 rounded">88888888</code>) and Ricoh Theta. Camera brand face must point to the front of the car; place on a monopod at <b>eye level</b> over the center console.</p>
             <div class="pt-2 flex flex-wrap gap-2">
               <button onclick="openCinema('zHTUuig3zuk', 'Ep 4-1-8: Multi image 360 Car Photography')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-8 360 Spin</button>
               <button onclick="openCinema('5zxg1pGP99w', 'Ep 4-1-9: Using 360 interior Panoramic Camera')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-9 Panoramic</button>
@@ -720,13 +746,13 @@
           </div>
 
           <!-- Multi-Verticals, VIN, Web Capture & Dynamic Badges -->
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-1-14" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 1: VIN, Web Capture & Badges" data-video="ftei13rgGDc">
             <h4 class="font-bold text-slate-900 text-sm">Multi-Verticals, VIN Decipher, Web Capture & Badges</h4>
             <ul class="space-y-1 list-disc list-inside">
-              <li><strong>Other Verticals (Trucks, RVs, Boats):</strong> Set Default Vertical to <i>"Ask Every Time"</i> in settings[cite: 1]. Full background removal is available for cars; trucks/RVs use thumbnail removal or blur background for spins[cite: 1].</li>
-              <li><strong>Advanced VIN Decipher:</strong> Powered by Chrome Data (J.D. Power) to pull exact build data, preventing false advertising liability[cite: 1].</li>
-              <li><strong>Web Capture:</strong> Generates a browser link sent via SMS/email for remote sellers to take trade-in appraisal photos without downloading the mobile app[cite: 1].</li>
-              <li><strong>Dynamic Badges:</strong> Auto-applied promotional overlays ("EV", "Low Mileage", "Special of Month") that auto-remove if vehicle price/specs change[cite: 1].</li>
+              <li><strong>Other Verticals (Trucks, RVs, Boats):</strong> Set Default Vertical to <i>"Ask Every Time"</i> in settings. Full background removal is available for cars; trucks/RVs use thumbnail removal or blur background for spins.</li>
+              <li><strong>Advanced VIN Decipher:</strong> Powered by Chrome Data (J.D. Power) to pull exact build data, preventing false advertising liability.</li>
+              <li><strong>Web Capture:</strong> Generates a browser link sent via SMS/email for remote sellers to take trade-in appraisal photos without downloading the mobile app.</li>
+              <li><strong>Dynamic Badges:</strong> Auto-applied promotional overlays ("EV", "Low Mileage", "Special of Month") that auto-remove if vehicle price/specs change.</li>
             </ul>
             <div class="pt-2 flex flex-wrap gap-2">
               <button onclick="openCinema('ZDGYtMB62V8', 'Ep 4-1-6: DM Setting - Other Verticals')" class="px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">Ep 4-1-6 Verticals</button>
@@ -750,11 +776,11 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed text-slate-600">
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+          <div id="card-ep-4-2-1" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between" data-category="Category 2: Unified Inbox & AI Agents" data-video="1x2x0Ntnn8k">
             <div class="space-y-2">
               <h4 class="font-bold text-slate-900 text-sm">Glo3D Inbox & Centralized AI Setup</h4>
-              <p><strong>Core Inboxes:</strong> Lead Inbox (sales pipeline from Contact to Sale), Chat Inbox (AI Bot, SMS, FBMP), and Voice Inbox[cite: 1]. Staff can <b>Pause AI</b> to take over hot chats live[cite: 1].</p>
-              <p><strong>AI Agents Training:</strong> Enter dealer website URL; system scrapes public pages in under 5 minutes to learn business hours, inventory, and promotions across all 6 AI channels[cite: 1].</p>
+              <p><strong>Core Inboxes:</strong> Lead Inbox (sales pipeline from Contact to Sale), Chat Inbox (AI Bot, SMS, FBMP), and Voice Inbox. Staff can <b>Pause AI</b> to take over hot chats live.</p>
+              <p><strong>AI Agents Training:</strong> Enter dealer website URL; system scrapes public pages in under 5 minutes to learn business hours, inventory, and promotions across all 6 AI channels.</p>
             </div>
             <div class="space-y-1.5 pt-2">
               <button onclick="openCinema('1x2x0Ntnn8k', 'Ep 4-2-1: Glo3D Inbox')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-2-1 Glo3D Inbox</button>
@@ -762,11 +788,11 @@
             </div>
           </div>
 
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+          <div id="card-ep-4-2-3" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between" data-category="Category 2: Super Chatbot & FBMP" data-video="_LrzFS_iQ1c">
             <div class="space-y-2">
               <h4 class="font-bold text-slate-900 text-sm">Super Chatbot & Multi-Channel Follow-Up</h4>
-              <p><strong>Conversational Logic:</strong> Chunks long texts into human texting intervals[cite: 1]. Targets Primary Goal (capturing phone/name) or Secondary Goal (booking showroom appointment / BHPH financing)[cite: 1].</p>
-              <p><strong>FBMP Bot & Auto-Poke:</strong> Engages Facebook Marketplace leads; auto-pokes stalled chats up to 3 times/day between 7:00 AM and midnight[cite: 1]. Follow-ups extend over SMS & Email with automated no-show appointment recovery[cite: 1].</p>
+              <p><strong>Conversational Logic:</strong> Chunks long texts into human texting intervals. Targets Primary Goal (capturing phone/name) or Secondary Goal (booking showroom appointment / BHPH financing).</p>
+              <p><strong>FBMP Bot & Auto-Poke:</strong> Engages Facebook Marketplace leads; auto-pokes stalled chats up to 3 times/day between 7:00 AM and midnight. Follow-ups extend over SMS & Email with automated no-show appointment recovery.</p>
             </div>
             <div class="space-y-1.5 pt-2">
               <button onclick="openCinema('_LrzFS_iQ1c', 'Ep 4-2-3: Super Chatbot')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-2-3 Super Chatbot</button>
@@ -775,11 +801,11 @@
             </div>
           </div>
 
-          <div class="p-5 rounded-xl bg-gloPurple-50/50 border border-gloPurple-200 space-y-3 flex flex-col justify-between">
+          <div id="card-ep-4-2-9" class="searchable-card p-5 rounded-xl bg-gloPurple-50/50 border border-gloPurple-200 space-y-3 flex flex-col justify-between" data-category="Category 2: AI Sales Coach" data-video="Vfs9D1YG7lk">
             <div class="space-y-2">
               <span class="text-[10px] font-mono font-bold text-gloPurple-700">SECRET WEAPON</span>
               <h4 class="font-bold text-slate-900 text-sm">AI Sales Coach (.docx Word Tracks)</h4>
-              <p><strong>Overcoming the 80/20 Rule:</strong> Solves sales rep disparity by capturing the winning word tracks of top 20% sales reps[cite: 1]. Compile their top 10 objections into a Word (.docx) file, upload it into the coach dashboard, and sales reps can roleplay common pushbacks directly via sub-user accounts[cite: 1].</p>
+              <p><strong>Overcoming the 80/20 Rule:</strong> Solves sales rep disparity by capturing the winning word tracks of top 20% sales reps. Compile their top 10 objections into a Word (.docx) file, upload it into the coach dashboard, and sales reps can roleplay common pushbacks directly via sub-user accounts.</p>
             </div>
             <button onclick="openCinema('Vfs9D1YG7lk', 'Ep 4-2-9: AI Sales Coach')" class="w-full py-2 rounded bg-gloPurple-600 text-white font-bold hover:bg-gloPurple-700 transition">
               Watch Ep 4-2-9 AI Coach Video
@@ -799,17 +825,17 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-slate-600">
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-3-1" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 3: Google Profile Listing" data-video="h7DdRlQ_1zA">
             <h4 class="font-bold text-slate-900 text-sm">Google Profile Listing & 500+ Backlinks</h4>
-            <p>Manages Google Business Profile by publishing every inventory item as an active product post, keeping the profile fresh and dominating local maps[cite: 1]. Automatically distributes SEO content across 500+ backlinks (adding 30 new high-authority backlinks per month)[cite: 1].</p>
+            <p>Manages Google Business Profile by publishing every inventory item as an active product post, keeping the profile fresh and dominating local maps. Automatically distributes SEO content across 500+ backlinks (adding 30 new high-authority backlinks per month).</p>
             <button onclick="openCinema('h7DdRlQ_1zA', 'Ep 4-3-1: Google Profile Listing')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
               Watch Ep 4-3-1 Google Profile Video (h7DdRlQ_1zA)
             </button>
           </div>
 
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-3-2" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 3: Virtual Showroom" data-video="AfOnf12GFnI">
             <h4 class="font-bold text-slate-900 text-sm">Virtual Showroom (Search-First Storefront)</h4>
-            <p>Ultra-lightweight digital storefront replacing slow dealership websites[cite: 1]. Lands buyers directly on a clean search grid with <b>Natural Language Search (NLS)</b> (e.g. <i>"beige interior 7-seater truck"</i>) and includes a downloadable high-res QR code for lot windows and business cards[cite: 1].</p>
+            <p>Ultra-lightweight digital storefront replacing slow dealership websites. Lands buyers directly on a clean search grid with <b>Natural Language Search (NLS)</b> (e.g. <i>"beige interior 7-seater truck"</i>) and includes a downloadable high-res QR code for lot windows and business cards.</p>
             <button onclick="openCinema('AfOnf12GFnI', 'Ep 4-3-2: Virtual Showroom')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
               Watch Ep 4-3-2 Virtual Showroom Video (AfOnf12GFnI)
             </button>
@@ -828,22 +854,22 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-slate-600">
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-4-1" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 4: FBMP Auto Post" data-video="vy0tDRWAHlE">
             <h4 class="font-bold text-slate-900 text-sm">Facebook Marketplace Auto Post (FBMP AP)</h4>
-            <p>Pushes listings to the dealer's personal FB Marketplace via virtual cloud machines using anti-bot randomized timing algorithms[cite: 1].</p>
+            <p>Pushes listings to the dealer's personal FB Marketplace via virtual cloud machines using anti-bot randomized timing algorithms.</p>
             <ul class="space-y-1 list-disc list-inside">
-              <li><strong>Posting Rules:</strong> Cascades prices (Main Price &gt; Secondary &gt; Down Payment &gt; Custom)[cite: 1]. Automatically overwrites new vehicle odometers to 300 miles and caps bugged odometers at 1,000,000 miles[cite: 1].</li>
-              <li><strong>Renewal & Trimming:</strong> 7-day renewal cycle (renew up to 4 times per listing)[cite: 1]. Automatically clips walkaround videos to the first 60 seconds to clear Facebook length restrictions[cite: 1].</li>
-              <li><strong>Insight Sweeps:</strong> Marketplace metrics scrape daily between 4:00 AM and 5:00 AM EST[cite: 1].</li>
+              <li><strong>Posting Rules:</strong> Cascades prices (Main Price &gt; Secondary &gt; Down Payment &gt; Custom). Automatically overwrites new vehicle odometers to 300 miles and caps bugged odometers at 1,000,000 miles.</li>
+              <li><strong>Renewal & Trimming:</strong> 7-day renewal cycle (renew up to 4 times per listing). Automatically clips walkaround videos to the first 60 seconds to clear Facebook length restrictions.</li>
+              <li><strong>Insight Sweeps:</strong> Marketplace metrics scrape daily between 4:00 AM and 5:00 AM EST.</li>
             </ul>
             <button onclick="openCinema('vy0tDRWAHlE', 'Ep 4-4-1: Facebook Marketplace Auto Post')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
               Watch Ep 4-4-1 FBMP Auto Post Video (vy0tDRWAHlE)
             </button>
           </div>
 
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-4-2" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 4: Social Automation" data-video="D6v9tf6EcZc">
             <h4 class="font-bold text-slate-900 text-sm">Inventory to Social Media Automation</h4>
-            <p>Connects dealer business pages on TikTok, Instagram, YouTube, X (Twitter), and LinkedIn[cite: 1]. Auto-generates up to 10 listing posts daily using dynamic tags (#Year #Make #Model) and AI descriptions with direct VDP backlinks[cite: 1]. Allows draft verification before publishing[cite: 1].</p>
+            <p>Connects dealer business pages on TikTok, Instagram, YouTube, X (Twitter), and LinkedIn. Auto-generates up to 10 listing posts daily using dynamic tags (#Year #Make #Model) and AI descriptions with direct VDP backlinks. Allows draft verification before publishing.</p>
             <button onclick="openCinema('D6v9tf6EcZc', 'Ep 4-4-2: Inventory to Social Media Automation')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
               Watch Ep 4-4-2 Social Automation Video (D6v9tf6EcZc)
             </button>
@@ -862,11 +888,11 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed text-slate-600">
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+          <div id="card-ep-4-5-2" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between" data-category="Category 5: Automated Tours" data-video="H39PYEppBkw">
             <div class="space-y-2">
               <span class="font-bold text-gloPurple-600 font-mono">TIER 1: ZERO EFFORT</span>
               <h4 class="font-bold text-slate-900 text-sm">Inventory Video Tours & YouTube Reviews</h4>
-              <p>Automatically generated from existing photo feeds with voiceover, background music, and VDP backlinks[cite: 1]. Dealerships utilizing video see a 30% increase in online sales[cite: 1]. Third-party YouTube car reviews embed directly into the VDP to keep buyers from leaving the site[cite: 1].</p>
+              <p>Automatically generated from existing photo feeds with voiceover, background music, and VDP backlinks. Dealerships utilizing video see a 30% increase in online sales. Third-party YouTube car reviews embed directly into the VDP to keep buyers from leaving the site.</p>
             </div>
             <div class="space-y-1.5 pt-2">
               <button onclick="openCinema('H39PYEppBkw', 'Ep 4-5-2: Inventory Video Tour')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-5-2 Video Tour</button>
@@ -874,22 +900,22 @@
             </div>
           </div>
 
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+          <div id="card-ep-4-5-5" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between" data-category="Category 5: Why Us Media" data-video="-kBOs3BF5nw">
             <div class="space-y-2">
               <span class="font-bold text-gloPurple-600 font-mono">TIER 2: ONE-TIME RECORDING</span>
               <h4 class="font-bold text-slate-900 text-sm">Why Us (YS) Media</h4>
-              <p>A single promotional video recorded by dealership owners or managers highlighting unique value propositions (warranty, upfront pricing, family values) placed prominently across all vehicle pages[cite: 1].</p>
+              <p>A single promotional video recorded by dealership owners or managers highlighting unique value propositions (warranty, upfront pricing, family values) placed prominently across all vehicle pages.</p>
             </div>
             <button onclick="openCinema('-kBOs3BF5nw', 'Ep 4-5-5: Why Us Media')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
               Watch Ep 4-5-5 Why Us Video
             </button>
           </div>
 
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+          <div id="card-ep-4-5-6" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between" data-category="Category 5: Social Video" data-video="0OAqSk8OxJQ">
             <div class="space-y-2">
               <span class="font-bold text-gloPurple-600 font-mono">TIER 3: DEDICATED 1-MIN</span>
               <h4 class="font-bold text-slate-900 text-sm">Social Video (Personalized Rep Links)</h4>
-              <p>Fast portrait-format videos recorded by sales reps to answer buyer inquiries[cite: 1]. Sent as streamable links (no large attachments) with auto-subtitles, dynamic tags, split camera layouts, and call-to-action buttons[cite: 1].</p>
+              <p>Fast portrait-format videos recorded by sales reps to answer buyer inquiries. Sent as streamable links (no large attachments) with auto-subtitles, dynamic tags, split camera layouts, and call-to-action buttons.</p>
             </div>
             <button onclick="openCinema('0OAqSk8OxJQ', 'Ep 4-5-6: Social Video')" class="w-full py-1.5 rounded bg-gloPurple-600 text-white font-bold hover:bg-gloPurple-700 transition">
               Watch Ep 4-5-6 Social Video (0OAqSk8OxJQ)
@@ -909,21 +935,21 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-slate-600">
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-6-1" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 6: Trade-In Value" data-video="-eZJXvmV8q8">
             <h4 class="font-bold text-slate-900 text-sm">Get Trade-In Value (AMP Database & Safe Deductions)</h4>
-            <p>Converts paid website traffic into qualified buyer leads[cite: 1]. Captures both the customer's trade-in details and the vehicle they want to buy[cite: 1].</p>
-            <p><strong>Valuation Methods:</strong> Choose between <i>Collect Lead Only</i> (forwarded to rep) or <i>Formula Calculation</i> using the Average Market Price (AMP) database with simultaneous Percentage (e.g. 5%) and Flat ($1,000) deduction safeguards to protect dealer profit margins[cite: 1].</p>
+            <p>Converts paid website traffic into qualified buyer leads. Captures both the customer's trade-in details and the vehicle they want to buy.</p>
+            <p><strong>Valuation Methods:</strong> Choose between <i>Collect Lead Only</i> (forwarded to rep) or <i>Formula Calculation</i> using the Average Market Price (AMP) database with simultaneous Percentage (e.g. 5%) and Flat ($1,000) deduction safeguards to protect dealer profit margins.</p>
             <button onclick="openCinema('-eZJXvmV8q8', 'Ep 4-6-1: Get Trade-In Value')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
               Watch Ep 4-6-1 Trade-In Value Video (-eZJXvmV8q8)
             </button>
           </div>
 
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div id="card-ep-4-6-2" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Category 6: Lead Gateways" data-video="HZc6pOl7hV4">
             <h4 class="font-bold text-slate-900 text-sm">Price Advisor, Carfax, Video & Test Drive</h4>
             <ul class="space-y-1 list-disc list-inside">
-              <li><strong>Price Advisor:</strong> Provides 3rd-party validation confirming listing price is fair; auto-hides if priced significantly above market[cite: 1].</li>
-              <li><strong>Request Carfax:</strong> Captures high-intent buyer contacts in exchange for history reports (instant download or manual rep follow-up)[cite: 1].</li>
-              <li><strong>Request a Video & Book Test Drive:</strong> Allows buyers to request custom walkthrough clips or schedule showroom slots directly on an integrated calendar[cite: 1].</li>
+              <li><strong>Price Advisor:</strong> Provides 3rd-party validation confirming listing price is fair; auto-hides if priced significantly above market.</li>
+              <li><strong>Request Carfax:</strong> Captures high-intent buyer contacts in exchange for history reports (instant download or manual rep follow-up).</li>
+              <li><strong>Request a Video & Book Test Drive:</strong> Allows buyers to request custom walkthrough clips or schedule showroom slots directly on an integrated calendar.</li>
             </ul>
             <button onclick="openCinema('HZc6pOl7hV4', 'Ep 4-6-2: Lead Magnet Details')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
               Watch Ep 4-6-2 to 4-6-4 Lead Magnets Video (HZc6pOl7hV4)
@@ -943,10 +969,10 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed text-slate-600">
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+          <div id="card-ep-4-7-1" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between" data-category="Category 7: Paid Ads" data-video="8vMk877Neek">
             <div class="space-y-2">
               <h4 class="font-bold text-slate-900 text-sm">Full-Service Paid Ads Management</h4>
-              <p>100% of customer ad budget goes directly into ad spend[cite: 1]. Glo3D charges a transparent <b>10% management fee</b> (significantly below 15–25% agency rates)[cite: 1]. Packages include Growth ($399, 1 platform), Scale ($699, unlimited), and Google Shopping ($399)[cite: 1].</p>
+              <p>100% of customer ad budget goes directly into ad spend. Glo3D charges a transparent <b>10% management fee</b> (significantly below 15–25% agency rates). Packages include Growth ($399, 1 platform), Scale ($699, unlimited), and Google Shopping ($399).</p>
             </div>
             <div class="space-y-1.5 pt-2">
               <button onclick="openCinema('8vMk877Neek', 'Ep 4-7-1: Paid Ads Overview')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-7-1 Paid Ads Video</button>
@@ -954,20 +980,20 @@
             </div>
           </div>
 
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+          <div id="card-ep-4-8" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between" data-category="Category 7: Organizations" data-video="SonAJZUpk_Q">
             <div class="space-y-2">
               <h4 class="font-bold text-slate-900 text-sm">Organizations & Multi-Rooftops (Chapter 4-8)</h4>
-              <p>Enables parent dealer groups to manage multiple rooftop accounts with Individual or Aggregated (parent consolidated bill) invoicing[cite: 1]. Auto-sync syncs global settings, while One-Time Sync preserves local store customization[cite: 1]. Sub-users cost $20/month per seat via SSO code[cite: 1].</p>
+              <p>Enables parent dealer groups to manage multiple rooftop accounts with Individual or Aggregated (parent consolidated bill) invoicing. Auto-sync syncs global settings, while One-Time Sync preserves local store customization. Sub-users cost $20/month per seat via SSO code.</p>
             </div>
             <button onclick="openCinema('SonAJZUpk_Q', 'Ep 4-8: Organization Management Overview')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
               Watch Ep 4-8 Organization Video (SonAJZUpk_Q)
             </button>
           </div>
 
-          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+          <div id="card-ep-4-10" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between" data-category="Category 7: Subscriptions" data-video="BYJ-VS7uAQo">
             <div class="space-y-2">
               <h4 class="font-bold text-slate-900 text-sm">Inventory Limits & Flex Plans (Chapter 4-9 & 4-10)</h4>
-              <p>Default lot limit is <b>200 units</b>[cite: 1]. Fixed-cost products (AI Bots, Auto-post) have $0 added cost for lot increases[cite: 1]. Variable-cost products (Guided Photo, 360, Custom Backgrounds) scale with lot size[cite: 1]. Discount codes capped at 30% on à la carte items[cite: 1].</p>
+              <p>Default lot limit is <b>200 units</b>. Fixed-cost products (AI Bots, Auto-post) have $0 added cost for lot increases. Variable-cost products (Guided Photo, 360, Custom Backgrounds) scale with lot size. Discount codes capped at 30% on à la carte items.</p>
             </div>
             <button onclick="openCinema('BYJ-VS7uAQo', 'Ep 4-10-1: Glo3D Subscription Plan Overview')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
               Watch Ep 4-10-1 Subscription Plan Video (BYJ-VS7uAQo)
@@ -987,18 +1013,18 @@
         <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
           High & Mid-Value Selling: Prospecting Playbook
         </h2>
-        <p class="text-sm text-slate-500 mt-1">Raymond's 4 fundamentals, state DMV active list scraping, and market segmentation[cite: 1].</p>
+        <p class="text-sm text-slate-500 mt-1">Raymond's 4 fundamentals, state DMV active list scraping, and market segmentation.</p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs leading-relaxed">
-        <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 lg:col-span-2 flex flex-col justify-between">
+        <div id="card-ep-5" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 lg:col-span-2 flex flex-col justify-between" data-category="Chapter 5: Prospecting Playbook" data-video="XjU0m5Psg4I">
           <div class="space-y-2">
             <h3 class="font-bold text-base text-slate-900">Prospecting Methodology: The 4 Fundamentals</h3>
             <ol class="space-y-1.5 list-decimal list-inside text-slate-600">
-              <li><strong>Build a Structured Pipeline:</strong> Structured prospecting drives clean forecasting and predictable closing rates[cite: 1].</li>
-              <li><strong>Define and Segment Your ICP:</strong> Avoid wasting time on unlicensed lots or seasonal dealers; prioritize lots with 50–200 cars[cite: 1].</li>
-              <li><strong>Map Key Vendors:</strong> Research the dealer's website provider (e.g. Dealer Center, CDK) before calling to pinpoint pain points[cite: 1].</li>
-              <li><strong>Leverage Targeted Outreach:</strong> Account-based cold calling with researched inventory metrics consistently outperforms random dials[cite: 1].</li>
+              <li><strong>Build a Structured Pipeline:</strong> Structured prospecting drives clean forecasting and predictable closing rates.</li>
+              <li><strong>Define and Segment Your ICP:</strong> Avoid wasting time on unlicensed lots or seasonal dealers; prioritize lots with 50–200 cars.</li>
+              <li><strong>Map Key Vendors:</strong> Research the dealer's website provider (e.g. Dealer Center, CDK) before calling to pinpoint pain points.</li>
+              <li><strong>Leverage Targeted Outreach:</strong> Account-based cold calling with researched inventory metrics consistently outperforms random dials.</li>
             </ol>
           </div>
           <button onclick="openCinema('XjU0m5Psg4I', 'Episode 5: High & Mid Value Selling')" class="py-2.5 px-4 rounded-xl bg-gloPurple-600 hover:bg-gloPurple-700 text-white font-bold transition flex items-center justify-center space-x-2">
@@ -1006,20 +1032,20 @@
           </button>
         </div>
 
-        <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+        <div id="card-ep-5-tiers" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Chapter 5: Market Segmentation">
           <h3 class="font-bold text-base text-slate-900">Market Segmentation</h3>
           <div class="space-y-2 text-slate-600">
             <div class="p-2.5 rounded bg-white border border-slate-200">
               <strong class="text-slate-900 block">Tier 1: Independent Lots (0–90 units)</strong>
-              <span>Search state DMV active dealer lists[cite: 1]. Short 1–3 day sales cycle with direct owner access[cite: 1].</span>
+              <span>Search state DMV active dealer lists. Short 1–3 day sales cycle with direct owner access.</span>
             </div>
             <div class="p-2.5 rounded bg-white border border-slate-200">
               <strong class="text-slate-900 block">Tier 2: Mid-Market (100–250 units)</strong>
-              <span>Target General Managers (GMs) using local dealership references for social proof[cite: 1].</span>
+              <span>Target General Managers (GMs) using local dealership references for social proof.</span>
             </div>
             <div class="p-2.5 rounded bg-white border border-slate-200">
               <strong class="text-slate-900 block">Tier 3: Enterprise (500+ units)</strong>
-              <span>Target corporate executives via Apollo Access; 6–12 month sales cycle for multi-rooftops[cite: 1].</span>
+              <span>Target corporate executives via Apollo Access; 6–12 month sales cycle for multi-rooftops.</span>
             </div>
           </div>
         </div>
@@ -1036,11 +1062,11 @@
         <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
           Sales Principles, Sign-Up Protocol & Battlecard
         </h2>
-        <p class="text-sm text-slate-500 mt-1">Screen sign-up execution, post-sales handoff, and direct competitor battlecard teardowns[cite: 1].</p>
+        <p class="text-sm text-slate-500 mt-1">Screen sign-up execution, post-sales handoff, and direct competitor battlecard teardowns.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-        <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+        <div id="card-ep-6-steps" class="searchable-card p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" data-category="Chapter 6: Sales Process" data-video="HC3IgSXyXAI">
           <h3 class="font-bold text-base text-slate-900">Closing Episodes 6-1 to 6-5</h3>
           <div class="space-y-2">
             <button onclick="openCinema('HC3IgSXyXAI', 'Ep 6-1: Principles of Sales')" class="w-full p-2.5 bg-white hover:bg-gloPurple-50 rounded-lg border border-slate-200 text-left flex justify-between items-center transition">
@@ -1052,11 +1078,11 @@
               <i data-lucide="play" class="w-3.5 h-3.5 text-gloPurple-600"></i>
             </button>
             <button onclick="openCinema('qMEXrlmVFjc', 'Ep 6-3: Sign-up Process')" class="w-full p-2.5 bg-white hover:bg-gloPurple-50 rounded-lg border border-slate-200 text-left flex justify-between items-center transition">
-              <span class="font-semibold text-slate-800">Episode 6-3: Sign-up on Dealer Screen (No CC on Phone)[cite: 1]</span>
+              <span class="font-semibold text-slate-800">Episode 6-3: Sign-up on Dealer Screen (No CC on Phone)</span>
               <i data-lucide="play" class="w-3.5 h-3.5 text-gloPurple-600"></i>
             </button>
             <button onclick="openCinema('abMRKIXZ1MU', 'Ep 6-4: Post Sales Steps')" class="w-full p-2.5 bg-white hover:bg-gloPurple-50 rounded-lg border border-slate-200 text-left flex justify-between items-center transition">
-              <span class="font-semibold text-slate-800">Episode 6-4: Post-Sales Steps & Support Handoff[cite: 1]</span>
+              <span class="font-semibold text-slate-800">Episode 6-4: Post-Sales Steps & Support Handoff</span>
               <i data-lucide="play" class="w-3.5 h-3.5 text-gloPurple-600"></i>
             </button>
             <button onclick="openCinema('6LPPhKN12tI', 'Ep 6-5: Onboarding & Integration')" class="w-full p-2.5 bg-white hover:bg-gloPurple-50 rounded-lg border border-slate-200 text-left flex justify-between items-center transition">
@@ -1066,7 +1092,7 @@
           </div>
         </div>
 
-        <div class="p-5 rounded-xl bg-gloPurple-50/50 border border-gloPurple-200 space-y-4 flex flex-col justify-between">
+        <div id="card-ep-6-battlecard" class="searchable-card p-5 rounded-xl bg-gloPurple-50/50 border border-gloPurple-200 space-y-4 flex flex-col justify-between" data-category="Chapter 6: Competition Battlecard">
           <div class="space-y-2">
             <span class="text-[10px] font-mono font-bold text-gloPurple-700">EPISODE 6-6 // LIVE TOOL</span>
             <h3 class="font-bold text-base text-slate-900">Direct Competition Live Portal</h3>
@@ -1091,49 +1117,49 @@
         <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
           Recorded Case Studies & Escaping Sales Rep Traps
         </h2>
-        <p class="text-sm text-slate-500 mt-1">Dissecting 3 bad calls vs. 3 championship closes, and avoiding fatal floor traps[cite: 1].</p>
+        <p class="text-sm text-slate-500 mt-1">Dissecting 3 bad calls vs. 3 championship closes, and avoiding fatal floor traps.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
         <!-- Bad Calls -->
-        <div class="p-5 rounded-xl bg-rose-50/50 border border-rose-200 space-y-3">
+        <div id="card-ep-7-bad" class="searchable-card p-5 rounded-xl bg-rose-50/50 border border-rose-200 space-y-3" data-category="Chapter 7: Bad Call Case Studies" data-video="rimUAaouzIU">
           <div class="flex items-center space-x-2 text-rose-700 font-bold text-sm">
             <i data-lucide="x-circle" class="w-4 h-4"></i>
             <span>3 Bad Call Breakdowns (Mistakes to Avoid)</span>
           </div>
           <div class="space-y-2">
             <div class="p-3 bg-white rounded-lg border border-rose-100 flex justify-between items-center">
-              <div><b class="text-slate-900 block">Bad Call #1</b><span class="text-slate-500">Rushing pitch without discovery[cite: 1]</span></div>
+              <div><b class="text-slate-900 block">Bad Call #1</b><span class="text-slate-500">Rushing pitch without discovery</span></div>
               <button onclick="openCinema('rimUAaouzIU', 'Case Study: Bad Call 1')" class="px-2.5 py-1 rounded bg-rose-100 hover:bg-rose-200 text-rose-800 font-semibold">Listen</button>
             </div>
             <div class="p-3 bg-white rounded-lg border border-rose-100 flex justify-between items-center">
-              <div><b class="text-slate-900 block">Bad Call #2</b><span class="text-slate-500">Fumbling price objections[cite: 1]</span></div>
+              <div><b class="text-slate-900 block">Bad Call #2</b><span class="text-slate-500">Fumbling price objections</span></div>
               <button onclick="openCinema('KzhK06R7SGw', 'Case Study: Bad Call 2')" class="px-2.5 py-1 rounded bg-rose-100 hover:bg-rose-200 text-rose-800 font-semibold">Listen</button>
             </div>
             <div class="p-3 bg-white rounded-lg border border-rose-100 flex justify-between items-center">
-              <div><b class="text-slate-900 block">Bad Call #3</b><span class="text-slate-500">Overpromising features[cite: 1]</span></div>
+              <div><b class="text-slate-900 block">Bad Call #3</b><span class="text-slate-500">Overpromising features</span></div>
               <button onclick="openCinema('ShlXM_P-Ys4', 'Case Study: Bad Call 3')" class="px-2.5 py-1 rounded bg-rose-100 hover:bg-rose-200 text-rose-800 font-semibold">Listen</button>
             </div>
           </div>
         </div>
 
         <!-- Good Calls -->
-        <div class="p-5 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-3">
+        <div id="card-ep-7-good" class="searchable-card p-5 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-3" data-category="Chapter 7: Winning Call Case Studies" data-video="B2wPtYov64g">
           <div class="flex items-center space-x-2 text-emerald-700 font-bold text-sm">
             <i data-lucide="check-circle" class="w-4 h-4"></i>
             <span>3 Good Call Breakdowns (Winning Closes)</span>
           </div>
           <div class="space-y-2">
             <div class="p-3 bg-white rounded-lg border border-emerald-100 flex justify-between items-center">
-              <div><b class="text-slate-900 block">Good Call #1</b><span class="text-slate-500">Flawless ICP qualification[cite: 1]</span></div>
+              <div><b class="text-slate-900 block">Good Call #1</b><span class="text-slate-500">Flawless ICP qualification</span></div>
               <button onclick="openCinema('B2wPtYov64g', 'Case Study: Good Call 1')" class="px-2.5 py-1 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold">Listen</button>
             </div>
             <div class="p-3 bg-white rounded-lg border border-emerald-100 flex justify-between items-center">
-              <div><b class="text-slate-900 block">Good Call #2</b><span class="text-slate-500">Handling 'email me info'[cite: 1]</span></div>
+              <div><b class="text-slate-900 block">Good Call #2</b><span class="text-slate-500">Handling 'email me info'</span></div>
               <button onclick="openCinema('v2V0HFtRwck', 'Case Study: Good Call 2')" class="px-2.5 py-1 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold">Listen</button>
             </div>
             <div class="p-3 bg-white rounded-lg border border-emerald-100 flex justify-between items-center">
-              <div><b class="text-slate-900 block">Good Call #3</b><span class="text-slate-500">One-call screen sign-up[cite: 1]</span></div>
+              <div><b class="text-slate-900 block">Good Call #3</b><span class="text-slate-500">One-call screen sign-up</span></div>
               <button onclick="openCinema('EjRKZFD7IZE', 'Case Study: Good Call 3')" class="px-2.5 py-1 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold">Listen</button>
             </div>
           </div>
@@ -1141,11 +1167,11 @@
       </div>
 
       <!-- Episode 8: Traps -->
-      <div class="p-6 rounded-xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+      <div id="card-ep-8" class="searchable-card p-6 rounded-xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-4 text-xs" data-category="Chapter 8: Sales Traps" data-video="wnWLMYCZJBQ">
         <div class="space-y-1">
           <span class="text-[10px] font-bold text-amber-400 uppercase font-mono">CHAPTER 8 // MANDATORY WATCH</span>
           <h3 class="font-bold text-base text-white">Episode 8-1: 5 Top Sales Reps Traps</h3>
-          <p class="text-slate-300 max-w-2xl">Avoid pitching before discovery, chasing dead leads, discounting without approval, violating 21-day locks, and skipping daily HubSpot task queues[cite: 1].</p>
+          <p class="text-slate-300 max-w-2xl">Avoid pitching before discovery, chasing dead leads, discounting without approval, violating 21-day locks, and skipping daily HubSpot task queues.</p>
         </div>
         <button onclick="openCinema('wnWLMYCZJBQ', 'Episode 8-1: 5 top sales reps traps')" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold transition whitespace-nowrap">
           Watch Traps Video (wnWLMYCZJBQ)
@@ -1201,10 +1227,186 @@
     </div>
   </div>
 
-  <!-- ================= JAVASCRIPT ENGINE ================= -->
+  <!-- ================= DYNAMIC FULL-TEXT SEARCH & UI SCRIPT ================= -->
   <script>
     // Initialize Lucide Icons
     lucide.createIcons();
+
+    // Universal Full-Text Search Engine: Scrapes the live DOM dynamically
+    function executeUniversalSearch() {
+      const input = document.getElementById('quickSearch');
+      const dropdown = document.getElementById('searchDropdown');
+      const clearBtn = document.getElementById('clearSearchBtn');
+      const rawQuery = input.value.trim();
+
+      if (!rawQuery) {
+        dropdown.classList.add('hidden');
+        dropdown.innerHTML = '';
+        clearBtn.classList.add('hidden');
+        resetCardFiltering();
+        return;
+      }
+
+      clearBtn.classList.remove('hidden');
+      const searchTerms = rawQuery.toLowerCase().split(/\s+/).filter(Boolean);
+
+      // Scrape every card and element on the page in real-time
+      const cards = document.querySelectorAll('.searchable-card');
+      const matches = [];
+
+      cards.forEach((card, index) => {
+        const fullText = card.innerText || '';
+        const lowerText = fullText.toLowerCase();
+
+        // Check if every typed term appears in this card
+        const isMatch = searchTerms.every(term => lowerText.includes(term));
+
+        if (isMatch) {
+          // Identify Card Title & Category
+          const headingEl = card.querySelector('h3, h4, .font-bold') || card;
+          const title = headingEl.innerText.split('\n')[0].replace(/EPISODE\s[0-9\-]+/i, '').trim();
+          const category = card.getAttribute('data-category') || 'Training Content';
+          const videoId = card.getAttribute('data-video') || '';
+
+          // Generate snippet excerpt around the matched search terms
+          let snippet = '';
+          const firstTerm = searchTerms[0];
+          const matchIndex = lowerText.indexOf(firstTerm);
+
+          if (matchIndex !== -1) {
+            const start = Math.max(0, matchIndex - 35);
+            const end = Math.min(fullText.length, matchIndex + firstTerm.length + 55);
+            snippet = (start > 0 ? '...' : '') + fullText.substring(start, end).replace(/\s+/g, ' ').trim() + (end < fullText.length ? '...' : '');
+
+            // Highlight words in snippet
+            searchTerms.forEach(term => {
+              const regex = new RegExp(`(${term})`, 'gi');
+              snippet = snippet.replace(regex, '<mark class="search-highlight">$1</mark>');
+            });
+          }
+
+          // Ensure Card has an ID
+          if (!card.id) {
+            card.id = `dyn-card-${index}`;
+          }
+
+          matches.push({
+            id: card.id,
+            title: title || 'Training Module',
+            category: category,
+            snippet: snippet,
+            videoId: videoId
+          });
+        }
+      });
+
+      // Filter in-page DOM cards
+      cards.forEach(card => {
+        const lowerText = card.innerText.toLowerCase();
+        const matchesQuery = searchTerms.every(term => lowerText.includes(term));
+        if (matchesQuery) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Render Dropdown Results
+      if (matches.length === 0) {
+        dropdown.innerHTML = `
+          <div class="p-4 text-center text-xs text-slate-400">
+            <i data-lucide="search-x" class="w-6 h-6 mx-auto mb-1 text-slate-300"></i>
+            No matching content found for "<b class="text-slate-700">${escapeHtml(rawQuery)}</b>".
+          </div>
+        `;
+      } else {
+        dropdown.innerHTML = `
+          <div class="px-3 py-1 text-[10px] font-mono font-bold uppercase text-gloPurple-600 bg-gloPurple-50 rounded-lg flex justify-between">
+            <span>Found ${matches.length} matching section${matches.length > 1 ? 's' : ''}</span>
+            <span>Click to Jump</span>
+          </div>
+          ${matches.slice(0, 8).map(item => `
+            <div onclick="navigateToResult('${item.id}', '${item.videoId}', '${escapeHtml(item.title)}')" 
+                 class="p-2.5 hover:bg-gloPurple-50 rounded-xl cursor-pointer transition flex items-start justify-between gap-3 group">
+              <div class="space-y-0.5 text-left flex-1 min-w-0">
+                <div class="flex items-center space-x-2">
+                  <span class="text-[9px] font-mono uppercase bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-semibold">${escapeHtml(item.category)}</span>
+                  <div class="text-xs font-bold text-slate-900 truncate group-hover:text-gloPurple-600">${item.title}</div>
+                </div>
+                <div class="text-[11px] text-slate-500 leading-snug line-clamp-2">${item.snippet}</div>
+              </div>
+              <div class="flex-shrink-0 pt-0.5">
+                <span class="text-[10px] font-semibold text-gloPurple-700 bg-gloPurple-100 group-hover:bg-gloPurple-600 group-hover:text-white px-2 py-1 rounded-lg transition inline-flex items-center space-x-1">
+                  <span>${item.videoId ? 'Watch' : 'Jump'}</span>
+                  <i data-lucide="${item.videoId ? 'play' : 'arrow-right'}" class="w-3 h-3"></i>
+                </span>
+              </div>
+            </div>
+          `).join('')}
+        `;
+      }
+
+      dropdown.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    // Jump to specific card, handle drawer expansion and glowing animation
+    function navigateToResult(elementId, videoId, title) {
+      const dropdown = document.getElementById('searchDropdown');
+      dropdown.classList.add('hidden');
+      resetCardFiltering();
+
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      // If the target is inside the collapsible pricing matrix and it's closed, expand it first
+      const pricingDrawer = document.getElementById('pricingAccordionContent');
+      if (pricingDrawer.contains(el) && !isPricingExpanded) {
+        togglePricingAccordion();
+      }
+
+      // Smooth scroll
+      setTimeout(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('highlight-target');
+        setTimeout(() => el.classList.remove('highlight-target'), 2600);
+      }, 100);
+
+      // If user selected a video directly, open modal
+      if (videoId) {
+        setTimeout(() => openCinema(videoId, title), 450);
+      }
+    }
+
+    function resetCardFiltering() {
+      document.querySelectorAll('.searchable-card').forEach(card => {
+        card.style.display = '';
+      });
+    }
+
+    function clearUniversalSearch() {
+      const input = document.getElementById('quickSearch');
+      input.value = '';
+      document.getElementById('searchDropdown').classList.add('hidden');
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      resetCardFiltering();
+    }
+
+    // Helper to sanitize HTML strings
+    function escapeHtml(str) {
+      return (str || '').replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[m]);
+    }
+
+    // Close search dropdown on click outside
+    document.addEventListener('click', (e) => {
+      const searchContainer = document.getElementById('quickSearch');
+      const dropdown = document.getElementById('searchDropdown');
+      if (searchContainer && dropdown && !searchContainer.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.add('hidden');
+      }
+    });
 
     // Accordion Toggle for Modular Pricing Matrix
     let isPricingExpanded = false;
@@ -1235,7 +1437,6 @@
       const titleEl = document.getElementById('modalVideoTitle');
       const directLink = document.getElementById('modalDirectLink');
 
-      // Strip any query parameters
       let cleanId = videoId;
       if (cleanId.includes('?')) cleanId = cleanId.split('?')[0];
       if (cleanId.includes('&')) cleanId = cleanId.split('&')[0];
@@ -1259,19 +1460,6 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeCinema();
     });
-
-    // Global Content Search
-    function searchContent() {
-      const query = document.getElementById('quickSearch').value.toLowerCase();
-      document.querySelectorAll('.searchable-section').forEach(section => {
-        const text = section.innerText.toLowerCase();
-        if (text.includes(query) || query === '') {
-          section.style.display = 'block';
-        } else {
-          section.style.display = 'none';
-        }
-      });
-    }
   </script>
 </body>
 </html>
