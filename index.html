@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glo3D.com | Sales Training & Product Operating System (v0.2)</title>
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gloPurple: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              200: '#ddd6fe',
+              500: '#7c3aed',
+              600: '#6936f5',
+              700: '#5b21b6',
+              800: '#4c1d95',
+              900: '#3b0764'
+            },
+            gloBlue: {
+              50: '#eff6ff',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8'
+            },
+            gloDark: '#0f172a',
+            gloCardHeader: '#6936f5'
+          },
+          fontFamily: {
+            sans: ['Inter', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+
+    body {
+      background-color: #f8fafc;
+      color: #334155;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Fixed Glo3D Headline: No letter clipping */
+    .glo-hero-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      line-height: 1.25;
+      padding-top: 0.15em;
+      padding-bottom: 0.2em;
+      color: #6936f5;
+      display: inline-block;
+    }
+
+    /* Interactive Keyword Tooltip System */
+    .term-keyword {
+      color: #6936f5;
+      border-bottom: 1.5px dashed #8b5cf6;
+      cursor: help;
+      position: relative;
+      display: inline;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .term-keyword:hover {
+      color: #4c1d95;
+      background-color: #ede9fe;
+      border-bottom-color: #4c1d95;
+      border-radius: 4px;
+      padding: 0 3px;
+    }
+
+    .term-tooltip {
+      visibility: hidden;
+      opacity: 0;
+      width: 320px;
+      position: absolute;
+      bottom: 135%;
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: #ffffff;
+      color: #1e293b;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(105, 54, 245, 0.12);
+      padding: 14px;
+      border-radius: 12px;
+      z-index: 9999;
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 12px;
+      line-height: 1.45;
+      text-align: left;
+      font-weight: normal;
+    }
+    .term-tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: #ffffff transparent transparent transparent;
+    }
+    .term-keyword:hover .term-tooltip {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Video Player Aspect Container */
+    .video-aspect {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #000000;
+    }
+    .video-aspect iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Smooth Collapsible Drawer */
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+    }
+    .collapsible-content.expanded {
+      max-height: 3800px;
+      transition: max-height 0.6s ease-in-out;
+    }
+  </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-gloPurple-600 selection:text-white">
+
+  <!-- ================= TOP GLOBAL NAVIGATION BAR ================= -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-sm px-6 py-3.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo and Direct Phone -->
+      <div class="flex items-center space-x-6">
+        <a href="#hero" class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-gloPurple-600 to-gloBlue-600 flex items-center justify-center text-white shadow-md">
+            <i data-lucide="zap" class="w-5 h-5"></i>
+          </div>
+          <span class="font-bold text-xl tracking-tight text-slate-900 font-['Plus_Jakarta_Sans']">Glo3D<span class="text-gloPurple-600">.com</span></span>
+        </a>
+        <a href="tel:647-428-6466" class="hidden md:inline-flex items-center space-x-1.5 text-xs font-bold text-gloPurple-600 hover:text-gloPurple-700 bg-gloPurple-50 px-3 py-1 rounded-full border border-gloPurple-100">
+          <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+          <span>647-428-6466</span>
+        </a>
+      </div>
+
+      <!-- Quick Global Search Bar -->
+      <div class="relative hidden md:block w-72">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+        <input type="text" id="quickSearch" onkeyup="searchContent()" placeholder="Search all 30+ products, SOPs, rules..." 
+          class="w-full bg-slate-50 border border-slate-200 focus:border-gloPurple-600 rounded-full pl-9 pr-4 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none transition">
+      </div>
+
+      <!-- Version Control HUD & Expandable Pricing Button -->
+      <div class="flex items-center space-x-3">
+        <div class="relative group">
+          <button class="flex items-center space-x-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-slate-800 transition">
+            <i data-lucide="git-branch" class="w-3.5 h-3.5 text-gloPurple-600"></i>
+            <span>BUILD: <b class="text-gloPurple-600">v0.2</b></span>
+            <i data-lucide="chevron-down" class="w-3 h-3 text-slate-500"></i>
+          </button>
+          <div class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl p-3 hidden group-hover:block transition-all border border-slate-200 z-50">
+            <div class="text-[10px] font-mono text-slate-400 uppercase tracking-wider px-2 pb-2 border-b border-slate-100">Build Version Ledger</div>
+            <div class="space-y-1.5 pt-2">
+              <div class="flex items-center justify-between p-2 rounded-lg bg-gloPurple-50 border border-gloPurple-200 text-xs text-slate-900">
+                <div>
+                  <div class="font-bold text-gloPurple-600 font-mono">v0.2 (Active)</div>
+                  <div class="text-[10px] text-slate-500">Full 30+ Tech Specs + Player Engine Fix</div>
+                </div>
+                <i data-lucide="check" class="w-4 h-4 text-gloPurple-600"></i>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded-lg text-xs text-slate-400 opacity-60">
+                <div>
+                  <div class="font-mono">v0.1 (Archived)</div>
+                  <div class="text-[10px]">Scaffold Build</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="togglePricingAccordion()" class="px-3.5 py-1.5 rounded-lg bg-gloPurple-600 hover:bg-gloPurple-700 text-white text-xs font-semibold shadow-sm transition flex items-center space-x-1.5">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+          <span id="navPricingBtnText">Pricing Matrix</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section id="hero" class="pt-14 pb-12 bg-gradient-to-b from-white via-gloPurple-50/40 to-slate-50 border-b border-slate-200 text-center px-4">
+    <div class="max-w-4xl mx-auto space-y-4">
+      <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-gloPurple-100 text-gloPurple-700 text-xs font-semibold border border-gloPurple-200">
+        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+        <span>Official Sales Training Playbook & Complete Product Specifications</span>
+      </div>
+
+      <!-- Clean Typography Headline (No Clipping) -->
+      <div>
+        <h1 class="glo-hero-title text-4xl sm:text-5xl md:text-6xl tracking-tight">
+          All-in-One<br>Digital Marketing
+        </h1>
+      </div>
+
+      <p class="text-slate-600 text-sm sm:text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
+        Revolutionize your dealership's digital marketing with AI-driven solutions in <b class="text-slate-900">Digital Merchandising</b>, <b class="text-slate-900">Omni Channel AI Employees</b>, <b class="text-slate-900">Local SEO</b>, <b class="text-slate-900">Social Media Marketing</b>, <b class="text-slate-900">Video Marketing</b>, <b class="text-slate-900">Lead Magnets</b>, and <b class="text-slate-900">Paid Ads Management</b>.
+      </p>
+
+      <!-- Quick Navigation Anchors -->
+      <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+        <a href="#ch1" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-gloPurple-500 text-xs font-semibold text-slate-700 shadow-sm transition">1. Industry Knowledge</a>
+        <a href="#ch2" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-gloPurple-500 text-xs font-semibold text-slate-700 shadow-sm transition">2. Culture & Rules</a>
+        <a href="#ch3" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-gloPurple-500 text-xs font-semibold text-slate-700 shadow-sm transition">3. Sales Tools</a>
+        <a href="#ch4" class="px-3 py-1.5 rounded-lg bg-gloPurple-600 text-white text-xs font-bold shadow-sm hover:bg-gloPurple-700 transition">4. All 7 Product Categories (Complete Specs)</a>
+        <a href="#ch5" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-gloPurple-500 text-xs font-semibold text-slate-700 shadow-sm transition">5. Prospecting & ICP</a>
+        <a href="#ch6" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-gloPurple-500 text-xs font-semibold text-slate-700 shadow-sm transition">6. Closing & Battlecard</a>
+        <a href="#ch7" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-gloPurple-500 text-xs font-semibold text-slate-700 shadow-sm transition">7. Call Vault</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COLLAPSIBLE PRICING MATRIX DRAWER ================= -->
+  <section class="max-w-7xl mx-auto px-4 w-full pt-8">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <button onclick="togglePricingAccordion()" class="w-full px-6 py-4 flex items-center justify-between bg-slate-50 hover:bg-slate-100 transition border-b border-slate-200">
+        <div class="flex items-center space-x-3 text-left">
+          <div class="w-9 h-9 rounded-xl bg-gloPurple-100 text-gloPurple-700 flex items-center justify-center">
+            <i data-lucide="tag" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-slate-900 font-['Plus_Jakarta_Sans']">Modular Pricing & À La Carte Subscription Matrix</h3>
+            <p class="text-xs text-slate-500">Click to expand or collapse the official product pricing table, discounted bundles, and inventory limit tiers.</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 text-xs font-bold text-gloPurple-600">
+          <span id="accordionStatusText">Click to Expand</span>
+          <i id="accordionIcon" data-lucide="chevron-down" class="w-4 h-4 transition duration-300"></i>
+        </div>
+      </button>
+
+      <!-- Collapsible Grid Content -->
+      <div id="pricingAccordionContent" class="collapsible-content">
+        <div class="p-6 bg-slate-50/50 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+
+            <!-- Category 1: Digital Merchandising -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs flex justify-between items-center">
+                <span>1. Digital Merchandising</span>
+                <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded">Core Merchandising</span>
+              </div>
+              <div class="divide-y divide-slate-100 text-xs">
+                <div class="p-3 flex justify-between"><span>Guided Photography</span><b class="text-slate-900">$49.00</b></div>
+                <div class="p-3 flex justify-between"><span>Custom Background</span><b class="text-slate-900">$99.00</b></div>
+                <div class="p-3 flex justify-between bg-gloPurple-50/40"><span>Advanced Custom Background</span><b class="text-gloPurple-700">$199.00</b></div>
+                <div class="p-3 flex justify-between"><span>Dynamic Badge</span><b class="text-slate-900">$99.00</b></div>
+                <div class="p-3 flex justify-between"><span>360 Car Photography</span><b class="text-slate-900">$149.00</b></div>
+                <div class="p-3 flex justify-between"><span>Web Capture (No App Link)</span><b class="text-slate-900">$149.00</b></div>
+                <div class="p-3 flex justify-between"><span>Advanced VIN Decipher</span><b class="text-slate-900">$49.00</b></div>
+                <div class="p-3 flex justify-between"><span>Walkaround and Engine Video</span><b class="text-slate-900">$149.00</b></div>
+              </div>
+            </div>
+
+            <!-- Category 2: Omni Channel AI Employee -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs flex justify-between items-center">
+                <span>2. Omni Channel AI Employee</span>
+                <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded">24/7 Automation</span>
+              </div>
+              <div class="divide-y divide-slate-100 text-xs">
+                <div class="p-3 flex justify-between"><span>Super Chatbot</span><b class="text-slate-900">$399.00</b></div>
+                <div class="p-3 flex justify-between"><span>Super Chatbot Follow-Up (Text & Email)</span><b class="text-slate-900">$149.00</b></div>
+                <div class="p-3 flex justify-between"><span>FBMP Chatbot</span><b class="text-slate-900">$149.00</b></div>
+                <div class="p-3 flex justify-between"><span>FBMP Lead Follow-Up (Text & Email)</span><b class="text-slate-900">$149.00</b></div>
+                <div class="p-3 flex justify-between"><span>Third-Party Lead Follow-Up (Text & Email)</span><b class="text-slate-900">$499.00</b></div>
+                <div class="p-3 flex justify-between"><span>Craigslist Lead Follow-Up</span><b class="text-slate-900">$99.00</b></div>
+                <div class="p-3 flex justify-between bg-gloPurple-50/40"><span>AI-Sales Coach (.docx word tracks)</span><b class="text-gloPurple-700">$899.00</b></div>
+              </div>
+            </div>
+
+            <!-- Category 3 & 4: Paid Ads & Video Marketing -->
+            <div class="space-y-4">
+              <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs flex justify-between items-center">
+                  <span>3. Paid Ads Management</span>
+                </div>
+                <div class="divide-y divide-slate-100 text-xs">
+                  <div class="p-3 flex justify-between">
+                    <div>
+                      <div>Paid Ads Growth (Full Service)</div>
+                      <div class="text-[10px] text-slate-400">$350 Setup + 10% Ad Spend</div>
+                    </div>
+                    <b class="text-slate-900">$399.00</b>
+                  </div>
+                  <div class="p-3 flex justify-between"><span>Paid Ads - Extra Platform</span><b class="text-slate-900">$100.00</b></div>
+                  <div class="p-3 flex justify-between">
+                    <div>
+                      <div>Paid Ads Scale (Unlimited)</div>
+                      <div class="text-[10px] text-slate-400">$350 Setup + 10% Ad Spend</div>
+                    </div>
+                    <b class="text-slate-900">$699.00</b>
+                  </div>
+                  <div class="p-3 flex justify-between">
+                    <div>
+                      <div>Google Shopping</div>
+                      <div class="text-[10px] text-slate-400">$150 Setup + 10% Ad Spend</div>
+                    </div>
+                    <b class="text-slate-900">$399.00</b>
+                  </div>
+                  <div class="p-3 flex justify-between"><span>Craigslist One-Click Poster</span><b class="text-slate-900">$49.00</b></div>
+                  <div class="p-3 flex justify-between"><span>Craigslist Auto-Poster</span><b class="text-slate-900">$99.00</b></div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs">4. Video Marketing</div>
+                <div class="divide-y divide-slate-100 text-xs">
+                  <div class="p-3 flex justify-between"><span>Inventory Video Tour</span><b class="text-slate-900">$199.00</b></div>
+                  <div class="p-3 flex justify-between"><span>YouTube Reviews / Features / Why Us</span><b class="text-slate-900">$99.00</b></div>
+                  <div class="p-3 flex justify-between"><span>Social Video (Personalized Links)</span><b class="text-slate-900">$99.00</b></div>
+                  <div class="p-3 flex justify-between"><span>Third-Party Video Hosting</span><b class="text-slate-900">$25.00</b></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 5: Local SEO -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs">5. Local SEO</div>
+              <div class="divide-y divide-slate-100 text-xs">
+                <div class="p-3 flex justify-between"><span>Google Profile Listing (500+ Backlinks)</span><b class="text-slate-900">$49.00</b></div>
+                <div class="p-3 flex justify-between"><span>Virtual Showroom (Search-First)</span><b class="text-slate-900">$99.00</b></div>
+              </div>
+            </div>
+
+            <!-- Category 6: Social Media Marketing -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs">6. Social Media Marketing</div>
+              <div class="divide-y divide-slate-100 text-xs">
+                <div class="p-3 flex justify-between"><span>Facebook Marketplace Auto-Post</span><b class="text-slate-900">$149.00</b></div>
+                <div class="p-3 flex justify-between"><span>Inventory to Social Media Automation</span><b class="text-slate-900">$49.00</b></div>
+              </div>
+            </div>
+
+            <!-- Category 7: Lead Magnets & Bundles -->
+            <div class="space-y-4">
+              <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs">7. Lead Magnets Suite</div>
+                <div class="p-3 flex justify-between text-xs">
+                  <span>Get Trade-In Value / Price Advisor / CARFAX / Video</span>
+                  <b class="text-slate-900">$99.00</b>
+                </div>
+              </div>
+
+              <!-- Official Discounted Bundles -->
+              <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-gloCardHeader px-4 py-2.5 text-white font-bold text-xs flex justify-between items-center">
+                  <span>Official Discounted Bundles</span>
+                  <span class="text-[10px] bg-emerald-400 text-slate-900 font-bold px-2 py-0.5 rounded">High Value</span>
+                </div>
+                <div class="divide-y divide-slate-100 text-xs">
+                  <div class="p-3 flex justify-between"><span>FBMP Lead Engine</span><b class="text-slate-900">$349.00</b></div>
+                  <div class="p-3 flex justify-between"><span>AI Employee Essentials</span><b class="text-slate-900">$749.00</b></div>
+                  <div class="p-3 flex justify-between bg-gloPurple-50/40"><span class="font-bold text-gloPurple-700">Digital Merchandising Pro</span><b class="text-gloPurple-700">$349.00</b></div>
+                  <div class="p-3 flex justify-between"><span>Video Marketing Essentials</span><b class="text-slate-900">$249.00</b></div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-white rounded-xl border border-slate-200 text-xs flex justify-between items-center">
+                <span>Sub-Users Access: <b>$20.00 / user / mo</b></span>
+                <span class="text-emerald-600 font-bold">1–200 Units Included ($0.00)</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MAIN CURRICULUM CONTENT VIEWPORT ================= -->
+  <main class="max-w-7xl mx-auto px-4 py-12 space-y-16">
+
+    <!-- ================= CHAPTER 1: INDUSTRY KNOWLEDGE ================= -->
+    <section id="ch1" class="searchable-section bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10 space-y-8">
+      <div class="border-b border-slate-200 pb-5">
+        <div class="flex items-center space-x-2 text-xs font-bold text-gloPurple-600 uppercase tracking-wider mb-1">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+          <span>Chapter 1: Industry Knowledge</span>
+        </div>
+        <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
+          The Automotive Industry Lifecycle & Dealership Software Stack
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">Understanding the fundamental lifecycle of vehicles, market players, and how Glo3D integrates within dealership software ecosystems.</p>
+      </div>
+
+      <!-- Section 1-1 -->
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h3 class="font-bold text-lg text-slate-900 flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-gloPurple-600"></span>
+            <span>Chapter 1-1: The Automotive Industry - Key Concepts</span>
+          </h3>
+          <button onclick="openCinema('BYAXOk9VqQA', 'Episode 1-1: The Automotive Industry - Key Concepts')" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-gloPurple-50 hover:bg-gloPurple-100 text-gloPurple-700 text-xs font-semibold border border-gloPurple-200 transition">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            <span>Watch Companion Video (BYAXOk9VqQA)</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs leading-relaxed text-slate-600">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <h4 class="font-bold text-slate-900 text-sm">Key Players & Terminology</h4>
+            <ul class="space-y-1.5 list-disc list-inside">
+              <li><strong class="text-slate-800"><span class="term-keyword">OEM<span class="term-tooltip"><b>Original Equipment Manufacturer:</b> The primary manufacturing company that builds vehicles (e.g., Toyota, GM, Ford).</span></span> (Original Equipment Manufacturer):</strong> The company that manufactures the car.</li>
+              <li><strong class="text-slate-800">Certified / Franchise Dealers:</strong> Authorized by OEMs to sell brand-new cars; split into New Car and Used Car departments.</li>
+              <li><strong class="text-slate-800">Independent Car Dealers:</strong> Not affiliated with any specific brand; sell strictly used cars acquired through auto auctions or customer trade-ins.</li>
+              <li><strong class="text-slate-800"><span class="term-keyword">BHPH<span class="term-tooltip"><b>Buy Here Pay Here:</b> Independent dealers specializing in subprime financing without external third-party lenders.</span></span> (Buy Here Pay Here):</strong> Specializes in buyers with bad credit, offering lower-quality cars and handling financing/leasing in-house.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <h4 class="font-bold text-slate-900 text-sm">The 5 Stages of the Car Life Cycle</h4>
+            <ol class="space-y-1.5 list-decimal list-inside">
+              <li><strong>Manufacturing:</strong> The OEM produces the car.</li>
+              <li><strong>Initial Sale:</strong> The car is sent to a Certified/Franchise Dealer.</li>
+              <li><strong>Consumer Acquisition:</strong> Consumers acquire via Lease (finance company owns vehicle), Finance (ownership upon payoff), or Full Cash Payoff.</li>
+              <li><strong>End of Lease / Ownership:</strong> Consumer buyout, dealer repurchase, or transfer to wholesale Dealer Auctions where independent dealers acquire units.</li>
+              <li><strong>Trade-in / Resale:</strong> Resold via Independent lots or Certified Used departments.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1-2 & 1-3 -->
+      <div class="space-y-4 pt-4 border-t border-slate-100">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h3 class="font-bold text-lg text-slate-900 flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-gloPurple-600"></span>
+            <span>Chapter 1-2 & 1-3: Dealership Software Stack & Glo3D Integration</span>
+          </h3>
+          <div class="flex items-center space-x-2">
+            <button onclick="openCinema('MpxWEwyFiVA', 'Episode 1-2: Dealership Software Stack & Glo3D Integration')" class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i><span>Ep 1-2 Video</span>
+            </button>
+            <button onclick="openCinema('JN6-lpzfzuw', 'Episode 1-3: Industry Software Overview')" class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i><span>Ep 1-3 Video</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">
+            <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[11px]">
+              <tr>
+                <th class="p-3">Software Category</th>
+                <th class="p-3">Primary Operational Purpose</th>
+                <th class="p-3">Glo3D Role & Integration Point</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-600">
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold text-slate-900"><span class="term-keyword">DMS<span class="term-tooltip"><b>Dealer Management System:</b> Accounting operating system tracking inventory financial records (e.g. CDK, DealerTrack, Reynolds).</span></span> (Dealer Management System)</td>
+                <td class="p-3">Accounting software tracking all vehicles bought, sold, serviced, and titled for long-term historical records.</td>
+                <td class="p-3">Pulls vehicle inventory data smoothly to keep listing data synced.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold text-slate-900"><span class="term-keyword">IMS<span class="term-tooltip"><b>Inventory Management System:</b> Content hub broadcasting photos and spins to AutoTrader, CarGurus, and dealer websites.</span></span> (Inventory Management System)</td>
+                <td class="p-3">Media hub for currently available cars, broadcasting photos and videos to websites and 3rd-party marketplaces.</td>
+                <td class="p-3">Content generated via mobile app is sent back to the IMS, with embeddable 360 spin scripts added to the dealer site.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold text-slate-900"><span class="term-keyword">CRM<span class="term-tooltip"><b>Customer Relationship Management:</b> Lead logging software. Glo3D warms leads with AI and forwards them via ADF XML format.</span></span> (Customer Relationship Management)</td>
+                <td class="p-3">Logs website and marketplace leads, assigns reps, and tracks customer follow-ups.</td>
+                <td class="p-3">Warms up leads with text/email AI follow-up before sending data to CRM in standard ADF format.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHAPTER 2: CULTURE & SALES FLOOR RULES ================= -->
+    <section id="ch2" class="searchable-section bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10 space-y-8">
+      <div class="border-b border-slate-200 pb-5">
+        <div class="flex items-center space-x-2 text-xs font-bold text-gloPurple-600 uppercase tracking-wider mb-1">
+          <i data-lucide="shield-alert" class="w-4 h-4"></i>
+          <span>Chapter 2: Culture, Solutions, Rules</span>
+        </div>
+        <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
+          Glo3D Culture, ICP & Internal Sales Floor Laws
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">High-performance sports team mindset, target customer economics, and strict floor policies.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed">
+        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+          <div class="space-y-2">
+            <h3 class="font-bold text-base text-slate-900">Championship Sports Team Culture</h3>
+            <p class="text-slate-600">We operate like a championship sports team, not a traditional family. Every rep is expected to be a world-class player bringing radical candor, continuous self-learning, obsessive customer care, and upward accountability.</p>
+          </div>
+          <button onclick="openCinema('CqYreJ0KQzQ', 'Episode 2-1: Glo3D Culture')" class="w-full py-2 rounded-lg bg-white border border-slate-200 hover:bg-gloPurple-50 text-gloPurple-700 font-semibold transition flex items-center justify-center space-x-1">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i><span>Watch Culture Video (CqYreJ0KQzQ)</span>
+          </button>
+        </div>
+
+        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+          <div class="space-y-2">
+            <h3 class="font-bold text-base text-slate-900">Ideal Customer Profile (50–200 Units)</h3>
+            <p class="text-slate-600">Our target market is independent and franchise dealers with 50 to 200 vehicles. Glo3D allows them to compete against 1,000-car mega-dealers by providing automated marketing replacing expensive agency staff.</p>
+          </div>
+          <button onclick="openCinema('buT2_7znhyI', 'Episode 2-2: Glo3D Solutions Overview')" class="w-full py-2 rounded-lg bg-white border border-slate-200 hover:bg-gloPurple-50 text-gloPurple-700 font-semibold transition flex items-center justify-center space-x-1">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i><span>Watch Overview Video (buT2_7znhyI)</span>
+          </button>
+        </div>
+
+        <div class="p-5 rounded-xl border-l-4 border-l-rose-500 bg-rose-50/50 border border-slate-200 space-y-3 flex flex-col justify-between">
+          <div class="space-y-2">
+            <span class="text-[10px] font-bold text-rose-700 uppercase font-mono">EPISODE 2-3 // DOCUMENT</span>
+            <h3 class="font-bold text-base text-slate-900">Sales Floor Rules & Policies</h3>
+            <p class="text-slate-600">Strict rules on the 21-day HubSpot callback period, $800 weekly Leadpool baseline, credit card handling, and cancellation protocols.</p>
+          </div>
+          <a href="https://docs.google.com/document/d/1-ZVDwsgRU8DlrFiAD2m8soSFtUoTDvtyUWkg4qfBnuE/edit?usp=sharing" target="_blank" class="w-full py-2 rounded-lg bg-white border border-rose-200 hover:bg-rose-100 text-rose-700 font-semibold transition flex items-center justify-center space-x-1">
+            <i data-lucide="file-text" class="w-3.5 h-3.5"></i><span>Open Official Doc</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Detailed Sales Floor Rules Box -->
+      <div class="p-5 rounded-xl bg-slate-900 text-slate-200 text-xs space-y-3">
+        <h4 class="font-bold text-white text-sm flex items-center space-x-2">
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
+          <span>Non-Negotiable Floor Rules Summary</span>
+        </h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 leading-relaxed">
+          <ul class="space-y-1.5 list-disc list-inside">
+            <li><strong>The 21-Day Rule:</strong> If an account status is EMPTY, check notes. If the note is under 21 days old, you <b>CANNOT</b> call. If over 21 days, you may call unless a specific future callback date was logged.</li>
+            <li><strong>Leadpool Eligibility:</strong> Reps must generate $800/week to enter the pool rotation. Late or absent reps skip their turn.</li>
+            <li><strong>Screen Sign-Ups Only:</strong> All sign-ups must be executed on the dealer's screen. <b>Never take credit card info over the phone.</b></li>
+          </ul>
+          <ul class="space-y-1.5 list-disc list-inside">
+            <li><strong>Zero Retention Policy:</strong> All cancellations must be transferred immediately to <b>Kim</b>. No retention attempts allowed under any circumstances.</li>
+            <li><strong>Cancelled Accounts:</strong> Strict 30-day waiting period from cancellation date before an account can be contacted.</li>
+            <li><strong>Commission Clawbacks:</strong> Overpromising features or unauthorized pricing discounts results in sale withdrawal and commission reversal.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHAPTER 3: SALES TOOLS ================= -->
+    <section id="ch3" class="searchable-section bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10 space-y-8">
+      <div class="border-b border-slate-200 pb-5">
+        <div class="flex items-center space-x-2 text-xs font-bold text-gloPurple-600 uppercase tracking-wider mb-1">
+          <i data-lucide="wrench" class="w-4 h-4"></i>
+          <span>Chapter 3: Glo3D Sales Tools</span>
+        </div>
+        <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
+          Sales Infrastructure & Operating Stack
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">Mastering HubSpot CRM workflows, Zoom Phone demo compliance, G-Suite email templates, and PIA VPN configurations.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3">
+          <div class="space-y-2">
+            <span class="font-mono font-bold text-gloPurple-600">EPISODE 3-1</span>
+            <h4 class="font-bold text-slate-900 text-sm">HubSpot Workflow</h4>
+            <p class="text-slate-600">Prioritizing the Tasks queue over the Contacts list; logging notes on Contact records only to protect work under the 21-day rule.</p>
+            <div class="p-2 rounded bg-slate-200 font-mono text-[11px] text-slate-800">
+              Passcode: <b class="text-gloPurple-700 select-all">ADK0ZW</b>
+            </div>
+          </div>
+          <a href="https://us06web.zoom.us/rec/share/bGatOZX4S9yKVxgRHjbSHJEXUFy99y0SOSaT4G94ULk-aDsQk-OmKGUdVllRac4z.-Aw2igAaf_hrk1u_" target="_blank" class="w-full py-1.5 rounded-lg bg-gloPurple-50 hover:bg-gloPurple-100 text-gloPurple-700 font-semibold transition flex items-center justify-center space-x-1">
+            <i data-lucide="video" class="w-3.5 h-3.5"></i><span>Zoom Recording</span>
+          </a>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3">
+          <div class="space-y-2">
+            <span class="font-mono font-bold text-gloPurple-600">EPISODE 3-2</span>
+            <h4 class="font-bold text-slate-900 text-sm">Zoom Phone & Demos</h4>
+            <p class="text-slate-600">Caller ID setup, recording QA compliance, live screen share demo rooms, and SMS messaging with prospects.</p>
+          </div>
+          <button onclick="openCinema('QQmr9kyVx_A', 'Episode 3-2: Zoom')" class="w-full py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 font-semibold transition">
+            Watch Video (QQmr9kyVx_A)
+          </button>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3">
+          <div class="space-y-2">
+            <span class="font-mono font-bold text-gloPurple-600">EPISODE 3-3</span>
+            <h4 class="font-bold text-slate-900 text-sm">Google G-Suite</h4>
+            <p class="text-slate-600">Setting up standardized professional email signatures, rapid-response templates, and Google Chat collaboration spaces.</p>
+          </div>
+          <button onclick="openCinema('70E5RLZ36jg', 'Episode 3-3: Google G-Suite')" class="w-full py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 font-semibold transition">
+            Watch Video (70E5RLZ36jg)
+          </button>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-3">
+          <div class="space-y-2">
+            <span class="font-mono font-bold text-gloPurple-600">EPISODE 3-4</span>
+            <h4 class="font-bold text-slate-900 text-sm">PIA VPN Tools</h4>
+            <p class="text-slate-600">Connecting to the Private Internet Access desktop application on <b>United States East</b> to bypass region-blocked dealer sites.</p>
+          </div>
+          <button onclick="openCinema('MX-Qbxv7TFQ', 'Episode 3-4: VPN Tools')" class="w-full py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 font-semibold transition">
+            Watch Video (MX-Qbxv7TFQ)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHAPTER 4: THE 7 CORE PRODUCT SUITES ================= -->
+    <section id="ch4" class="searchable-section bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10 space-y-12">
+      <div class="border-b border-slate-200 pb-5">
+        <div class="flex items-center space-x-2 text-xs font-bold text-gloPurple-600 uppercase tracking-wider mb-1">
+          <i data-lucide="cpu" class="w-4 h-4"></i>
+          <span>Chapter 4: The 30+ Glo3D Products</span>
+        </div>
+        <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
+          In-Depth Product Technical & Operational Specifications
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">Complete technical manual for all services organized across the 7 main marketing categories.</p>
+      </div>
+
+      <!-- CATEGORY 1: DIGITAL MERCHANDISING -->
+      <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 class="font-bold text-xl text-slate-900 flex items-center space-x-2">
+            <i data-lucide="camera" class="w-5 h-5 text-gloPurple-600"></i>
+            <span>Category 1: Digital Merchandising</span>
+          </h3>
+          <span class="text-xs bg-gloPurple-100 text-gloPurple-700 px-3 py-1 rounded-full font-bold">16 Modules</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-slate-600">
+          <!-- Basic Setup & Overview -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">Basic System Setup & Digital Merchandising Overview</h4>
+            <p><strong>Two Platforms:</strong> Web App (glow3d.net) for setup/account management and Mobile App exclusively for vehicle media capture.</p>
+            <ul class="space-y-1 list-disc list-inside">
+              <li><strong>Display Profile (My Account):</strong> Crucial customer-facing display data (logo, name, address). Upscale low-res logos using the built-in <b>Image Upscaler</b>.</li>
+              <li><strong>Capture Aspect Ratio:</strong> Must be set <i>before</i> capturing any vehicle (e.g. 16:9, 3:2, or 4:3) to match the dealer's website.</li>
+              <li><strong>Default Backlink:</strong> Set primary source to <b>Vehicle Detail Page (VDP)</b> and secondary to static dealer homepage to guarantee backlinks from all social shares.</li>
+              <li><strong>Resolution & Archiving:</strong> Capture resolution defaults to <b>2K</b>; archive setting defaults to <i>Auto archive sold cars</i>.</li>
+            </ul>
+            <div class="pt-2 flex flex-wrap gap-2">
+              <button onclick="openCinema('pqYA5IcsG7A', 'Ep 4-1: Basic System Setup')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1 Setup Video</button>
+              <button onclick="openCinema('clDTfEZtw1s', 'Ep 4-1-1: Digital Merchandising Overview')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-1 Overview Video</button>
+            </div>
+          </div>
+
+          <!-- DM Settings Part 1 & 2 -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">DM Settings & Customer Skill Adaptation</h4>
+            <p><strong>Skill Level Adaptation:</strong> "Bicycle customers" (smaller lots) need simple workflows; "Ferrari customers" (dedicated photographers) can use advanced modes.</p>
+            <ul class="space-y-1 list-disc list-inside">
+              <li><strong>Smart Camera Mode:</strong> Recommended default; automatically balances standard and wide-angle lenses for a natural look without distortion.</li>
+              <li><strong>Plate Blurring & Left/Right Drive:</strong> License plate blurring defaults OFF (consumes extra resources). Left-hand drive is North American default.</li>
+              <li><strong>Gallery Styles:</strong> <b>Classic Gallery</b> (traditional thumbnail strip) vs. <b>Nova Gallery</b> (modern floating UI). Color match themes using the <b>ColorZilla</b> Chrome extension.</li>
+              <li><strong>Promotional Photos:</strong> Insert marketing slides every 3 photos; avoid placing them as the very first image.</li>
+            </ul>
+            <div class="pt-2 flex flex-wrap gap-2">
+              <button onclick="openCinema('0lpj9rwyltY', 'Ep 4-1-2: DM Setting - Part 1')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-2 DM Part 1</button>
+              <button onclick="openCinema('QStytoXE3Z4', 'Ep 4-1-3: DM Setting - Part 2')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-3 DM Part 2</button>
+            </div>
+          </div>
+
+          <!-- Guided Photography SOP -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">Guided Photography Standard Operating Procedure</h4>
+            <p>Captures standardized vehicle galleries in under 5 minutes with automated AI processing:</p>
+            <ul class="space-y-1 list-disc list-inside">
+              <li><strong>Phase 1: Exterior Money Shots</strong> — 8 standard angles starting from passenger side at door-handle height with green on-screen guides.</li>
+              <li><strong>Phase 2: Close-Ups & Open Doors</strong> — Switch to Ultra-Wide lens for driver door, rear door, and mirror close-ups.</li>
+              <li><strong>Phase 3: Interior Shots</strong> — Sit in the <b>back seat</b> with Ultra-Wide lens for dashboard and center console; move to front for steering wheel controls.</li>
+              <li><strong>Phase 4: Save & AI Processing</strong> — Wait for upload to hit 100%; AI removes background, generates video tour with voiceover, adds promotional overlays, and syndicates to website and IMS.</li>
+            </ul>
+            <button onclick="openCinema('0rccmxQ2kS0', 'Ep 4-1-7: Guided Photography')" class="w-full py-1.5 rounded bg-gloPurple-50 hover:bg-gloPurple-100 text-gloPurple-700 font-semibold transition border border-gloPurple-200">
+              Watch Ep 4-1-7 Guided Photography SOP (0rccmxQ2kS0)
+            </button>
+          </div>
+
+          <!-- Standard vs Advanced Custom Backgrounds -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">Standard vs. AI Advanced Background Removal</h4>
+            <p><strong>Standard Background:</strong> Replaces background with one virtual setting. Turntable should be <b>unchecked</b> for gallery photos (maximizes car size) and <b>checked</b> for 360 spin.</p>
+            <p><strong>AI Advanced Background (2026 Engine):</strong> Gen-AI engine with Left/Center/Right multi-perspective backgrounds, auto-relighting to prevent shadow color cast, clean white Search Results Page (SRP) thumbnails, and High-Point vs. Low-Point sports car camera modes.</p>
+            <div class="pt-2 flex flex-wrap gap-2">
+              <button onclick="openCinema('kLWlDVL6xw8', 'Ep 4-1-5: AI Background Removal for Car Photography in 2026')" class="px-2.5 py-1 rounded bg-gloPurple-600 text-white font-semibold hover:bg-gloPurple-700">Ep 4-1-5 AI Background 2026</button>
+              <button onclick="openCinema('S1VzRIZerXk', 'Ep 4-1-4: Custom Background')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-4 Standard</button>
+            </div>
+          </div>
+
+          <!-- 360 Spins & Interior Panoramic -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">360 Exterior Spins & Interior Panoramic Photography</h4>
+            <p><strong>Exterior 360 Capture:</strong> 16 frames recommended for smooth spins (8 frames for max speed). Use Standard Lens from 5 steps away; voice control enables hands-free shooting in cold weather.</p>
+            <p><strong>360 Interior Panoramic:</strong> Direct connection to Insta360 (default universal password <code class="bg-slate-200 px-1 rounded">88888888</code>) and Ricoh Theta. Camera brand face must point to the front of the car; place on a monopod at <b>eye level</b> over the center console.</p>
+            <div class="pt-2 flex flex-wrap gap-2">
+              <button onclick="openCinema('zHTUuig3zuk', 'Ep 4-1-8: Multi image 360 Car Photography')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-8 360 Spin</button>
+              <button onclick="openCinema('5zxg1pGP99w', 'Ep 4-1-9: Using 360 interior Panoramic Camera')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-9 Panoramic</button>
+              <button onclick="openCinema('zxP3qZKi998', 'Ep 4-1-12: 360 Photography using Gimbal')" class="px-2.5 py-1 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-1-12 Gimbal</button>
+            </div>
+          </div>
+
+          <!-- Multi-Verticals, VIN, Web Capture & Dynamic Badges -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">Multi-Verticals, VIN Decipher, Web Capture & Badges</h4>
+            <ul class="space-y-1 list-disc list-inside">
+              <li><strong>Other Verticals (Trucks, RVs, Boats):</strong> Set Default Vertical to <i>"Ask Every Time"</i> in settings. Full background removal is available for cars; trucks/RVs use thumbnail removal or blur background for spins.</li>
+              <li><strong>Advanced VIN Decipher:</strong> Powered by Chrome Data (J.D. Power) to pull exact build data, preventing false advertising liability.</li>
+              <li><strong>Web Capture:</strong> Generates a browser link sent via SMS/email for remote sellers to take trade-in appraisal photos without downloading the mobile app.</li>
+              <li><strong>Dynamic Badges:</strong> Auto-applied promotional overlays ("EV", "Low Mileage", "Special of Month") that auto-remove if vehicle price/specs change.</li>
+            </ul>
+            <div class="pt-2 flex flex-wrap gap-2">
+              <button onclick="openCinema('ZDGYtMB62V8', 'Ep 4-1-6: DM Setting - Other Verticals')" class="px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">Ep 4-1-6 Verticals</button>
+              <button onclick="openCinema('ftei13rgGDc', 'Ep 4-1-14: Advanced Vin Decipher')" class="px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">Ep 4-1-14 VIN</button>
+              <button onclick="openCinema('mnxDZ2621J4', 'Ep 4-1-13: Web Capture')" class="px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">Ep 4-1-13 Web Capture</button>
+              <button onclick="openCinema('-33zwg5MkjA', 'Ep 4-1-15: Walkaround and Engine Video')" class="px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">Ep 4-1-15 Video</button>
+              <button onclick="openCinema('H8W7q1n5i-s', 'Ep 4-1-16: Dynamic Badge')" class="px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">Ep 4-1-16 Badges</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORY 2: OMNI CHANNEL AI EMPLOYEES -->
+      <div class="space-y-6 pt-6 border-t border-slate-200">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 class="font-bold text-xl text-slate-900 flex items-center space-x-2">
+            <i data-lucide="bot" class="w-5 h-5 text-gloPurple-600"></i>
+            <span>Category 2: Omni Channel AI Employees</span>
+          </h3>
+          <span class="text-xs bg-gloPurple-100 text-gloPurple-700 px-3 py-1 rounded-full font-bold">24/7 Lead Automation</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed text-slate-600">
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <h4 class="font-bold text-slate-900 text-sm">Glo3D Inbox & Centralized AI Setup</h4>
+              <p><strong>Core Inboxes:</strong> Lead Inbox (sales pipeline from Contact to Sale), Chat Inbox (AI Bot, SMS, FBMP), and Voice Inbox. Staff can <b>Pause AI</b> to take over hot chats live.</p>
+              <p><strong>AI Agents Training:</strong> Enter dealer website URL; system scrapes public pages in under 5 minutes to learn business hours, inventory, and promotions across all 6 AI channels.</p>
+            </div>
+            <div class="space-y-1.5 pt-2">
+              <button onclick="openCinema('1x2x0Ntnn8k', 'Ep 4-2-1: Glo3D Inbox')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-2-1 Glo3D Inbox</button>
+              <button onclick="openCinema('ay2ypXWJbkw', 'Ep 4-2-2: AI Agents Overview')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-2-2 AI Architecture</button>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <h4 class="font-bold text-slate-900 text-sm">Super Chatbot & Multi-Channel Follow-Up</h4>
+              <p><strong>Conversational Logic:</strong> Chunks long texts into human texting intervals. Targets Primary Goal (capturing phone/name) or Secondary Goal (booking showroom appointment / BHPH financing).</p>
+              <p><strong>FBMP Bot & Auto-Poke:</strong> Engages Facebook Marketplace leads; auto-pokes stalled chats up to 3 times/day between 7:00 AM and midnight. Follow-ups extend over SMS & Email with automated no-show appointment recovery.</p>
+            </div>
+            <div class="space-y-1.5 pt-2">
+              <button onclick="openCinema('_LrzFS_iQ1c', 'Ep 4-2-3: Super Chatbot')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-2-3 Super Chatbot</button>
+              <button onclick="openCinema('RrTCBq7vGUk', 'Ep 4-2-4: Superchatbot follow-up')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-2-4 Follow-up</button>
+              <button onclick="openCinema('d_d037HdmtI', 'Ep 4-2-5: FBMP Chatbot')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-2-5 FBMP Bot</button>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-xl bg-gloPurple-50/50 border border-gloPurple-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="text-[10px] font-mono font-bold text-gloPurple-700">SECRET WEAPON</span>
+              <h4 class="font-bold text-slate-900 text-sm">AI Sales Coach (.docx Word Tracks)</h4>
+              <p><strong>Overcoming the 80/20 Rule:</strong> Solves sales rep disparity by capturing the winning word tracks of top 20% sales reps. Compile their top 10 objections into a Word (.docx) file, upload it into the coach dashboard, and sales reps can roleplay common pushbacks directly via sub-user accounts.</p>
+            </div>
+            <button onclick="openCinema('Vfs9D1YG7lk', 'Ep 4-2-9: AI Sales Coach')" class="w-full py-2 rounded bg-gloPurple-600 text-white font-bold hover:bg-gloPurple-700 transition">
+              Watch Ep 4-2-9 AI Coach Video
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORY 3: LOCAL SEO -->
+      <div class="space-y-6 pt-6 border-t border-slate-200">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 class="font-bold text-xl text-slate-900 flex items-center space-x-2">
+            <i data-lucide="map-pin" class="w-5 h-5 text-gloPurple-600"></i>
+            <span>Category 3: Local SEO (Search Engine Optimization)</span>
+          </h3>
+          <span class="text-xs bg-gloPurple-100 text-gloPurple-700 px-3 py-1 rounded-full font-bold">Organic Dominance</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-slate-600">
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">Google Profile Listing & 500+ Backlinks</h4>
+            <p>Manages Google Business Profile by publishing every inventory item as an active product post, keeping the profile fresh and dominating local maps. Automatically distributes SEO content across 500+ backlinks (adding 30 new high-authority backlinks per month).</p>
+            <button onclick="openCinema('h7DdRlQ_1zA', 'Ep 4-3-1: Google Profile Listing')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
+              Watch Ep 4-3-1 Google Profile Video (h7DdRlQ_1zA)
+            </button>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">Virtual Showroom (Search-First Storefront)</h4>
+            <p>Ultra-lightweight digital storefront replacing slow dealership websites. Lands buyers directly on a clean search grid with <b>Natural Language Search (NLS)</b> (e.g. <i>"beige interior 7-seater truck"</i>) and includes a downloadable high-res QR code for lot windows and business cards.</p>
+            <button onclick="openCinema('AfOnf12GFnI', 'Ep 4-3-2: Virtual Showroom')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
+              Watch Ep 4-3-2 Virtual Showroom Video (AfOnf12GFnI)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORY 4: SOCIAL MEDIA MARKETING -->
+      <div class="space-y-6 pt-6 border-t border-slate-200">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 class="font-bold text-xl text-slate-900 flex items-center space-x-2">
+            <i data-lucide="share-2" class="w-5 h-5 text-gloPurple-600"></i>
+            <span>Category 4: Social Media Marketing</span>
+          </h3>
+          <span class="text-xs bg-gloPurple-100 text-gloPurple-700 px-3 py-1 rounded-full font-bold">Cloud Auto-Posting</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-slate-600">
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">Facebook Marketplace Auto Post (FBMP AP)</h4>
+            <p>Pushes listings to the dealer's personal FB Marketplace via virtual cloud machines using anti-bot randomized timing algorithms.</p>
+            <ul class="space-y-1 list-disc list-inside">
+              <li><strong>Posting Rules:</strong> Cascades prices (Main Price &gt; Secondary &gt; Down Payment &gt; Custom). Automatically overwrites new vehicle odometers to 300 miles and caps bugged odometers at 1,000,000 miles.</li>
+              <li><strong>Renewal & Trimming:</strong> 7-day renewal cycle (renew up to 4 times per listing). Automatically clips walkaround videos to the first 60 seconds to clear Facebook length restrictions.</li>
+              <li><strong>Insight Sweeps:</strong> Marketplace metrics scrape daily between 4:00 AM and 5:00 AM EST.</li>
+            </ul>
+            <button onclick="openCinema('vy0tDRWAHlE', 'Ep 4-4-1: Facebook Marketplace Auto Post')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
+              Watch Ep 4-4-1 FBMP Auto Post Video (vy0tDRWAHlE)
+            </button>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">Inventory to Social Media Automation</h4>
+            <p>Connects dealer business pages on TikTok, Instagram, YouTube, X (Twitter), and LinkedIn. Auto-generates up to 10 listing posts daily using dynamic tags (#Year #Make #Model) and AI descriptions with direct VDP backlinks. Allows draft verification before publishing.</p>
+            <button onclick="openCinema('D6v9tf6EcZc', 'Ep 4-4-2: Inventory to Social Media Automation')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
+              Watch Ep 4-4-2 Social Automation Video (D6v9tf6EcZc)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORY 5: VIDEO MARKETING -->
+      <div class="space-y-6 pt-6 border-t border-slate-200">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 class="font-bold text-xl text-slate-900 flex items-center space-x-2">
+            <i data-lucide="video" class="w-5 h-5 text-gloPurple-600"></i>
+            <span>Category 5: Video Marketing</span>
+          </h3>
+          <span class="text-xs bg-gloPurple-100 text-gloPurple-700 px-3 py-1 rounded-full font-bold">+30% Conversion Boost</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed text-slate-600">
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="font-bold text-gloPurple-600 font-mono">TIER 1: ZERO EFFORT</span>
+              <h4 class="font-bold text-slate-900 text-sm">Inventory Video Tours & YouTube Reviews</h4>
+              <p>Automatically generated from existing photo feeds with voiceover, background music, and VDP backlinks. Dealerships utilizing video see a 30% increase in online sales. Third-party YouTube car reviews embed directly into the VDP to keep buyers from leaving the site.</p>
+            </div>
+            <div class="space-y-1.5 pt-2">
+              <button onclick="openCinema('H39PYEppBkw', 'Ep 4-5-2: Inventory Video Tour')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-5-2 Video Tour</button>
+              <button onclick="openCinema('-kBOs3BF5nw', 'Ep 4-5-3: Youtube Reviews & Why Us Media')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-5-3 YouTube Reviews</button>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="font-bold text-gloPurple-600 font-mono">TIER 2: ONE-TIME RECORDING</span>
+              <h4 class="font-bold text-slate-900 text-sm">Why Us (YS) Media</h4>
+              <p>A single promotional video recorded by dealership owners or managers highlighting unique value propositions (warranty, upfront pricing, family values) placed prominently across all vehicle pages.</p>
+            </div>
+            <button onclick="openCinema('-kBOs3BF5nw', 'Ep 4-5-5: Why Us Media')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
+              Watch Ep 4-5-5 Why Us Video
+            </button>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="font-bold text-gloPurple-600 font-mono">TIER 3: DEDICATED 1-MIN</span>
+              <h4 class="font-bold text-slate-900 text-sm">Social Video (Personalized Rep Links)</h4>
+              <p>Fast portrait-format videos recorded by sales reps to answer buyer inquiries. Sent as streamable links (no large attachments) with auto-subtitles, dynamic tags, split camera layouts, and call-to-action buttons.</p>
+            </div>
+            <button onclick="openCinema('0OAqSk8OxJQ', 'Ep 4-5-6: Social Video')" class="w-full py-1.5 rounded bg-gloPurple-600 text-white font-bold hover:bg-gloPurple-700 transition">
+              Watch Ep 4-5-6 Social Video (0OAqSk8OxJQ)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORY 6: LEAD MAGNETS -->
+      <div class="space-y-6 pt-6 border-t border-slate-200">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 class="font-bold text-xl text-slate-900 flex items-center space-x-2">
+            <i data-lucide="magnet" class="w-5 h-5 text-gloPurple-600"></i>
+            <span>Category 6: Lead Magnets Suite</span>
+          </h3>
+          <span class="text-xs bg-gloPurple-100 text-gloPurple-700 px-3 py-1 rounded-full font-bold">Traffic to Lead Conversion</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed text-slate-600">
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">Get Trade-In Value (AMP Database & Safe Deductions)</h4>
+            <p>Converts paid website traffic into qualified buyer leads. Captures both the customer's trade-in details and the vehicle they want to buy.</p>
+            <p><strong>Valuation Methods:</strong> Choose between <i>Collect Lead Only</i> (forwarded to rep) or <i>Formula Calculation</i> using the Average Market Price (AMP) database with simultaneous Percentage (e.g. 5%) and Flat ($1,000) deduction safeguards to protect dealer profit margins.</p>
+            <button onclick="openCinema('-eZJXvmV8q8', 'Ep 4-6-1: Get Trade-In Value')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
+              Watch Ep 4-6-1 Trade-In Value Video (-eZJXvmV8q8)
+            </button>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm">Price Advisor, Carfax, Video & Test Drive</h4>
+            <ul class="space-y-1 list-disc list-inside">
+              <li><strong>Price Advisor:</strong> Provides 3rd-party validation confirming listing price is fair; auto-hides if priced significantly above market.</li>
+              <li><strong>Request Carfax:</strong> Captures high-intent buyer contacts in exchange for history reports (instant download or manual rep follow-up).</li>
+              <li><strong>Request a Video & Book Test Drive:</strong> Allows buyers to request custom walkthrough clips or schedule showroom slots directly on an integrated calendar.</li>
+            </ul>
+            <button onclick="openCinema('HZc6pOl7hV4', 'Ep 4-6-2: Lead Magnet Details')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
+              Watch Ep 4-6-2 to 4-6-4 Lead Magnets Video (HZc6pOl7hV4)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORY 7: PAID ADS, ORGANIZATIONS & SUBSCRIPTION PLANS -->
+      <div class="space-y-6 pt-6 border-t border-slate-200">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <h3 class="font-bold text-xl text-slate-900 flex items-center space-x-2">
+            <i data-lucide="credit-card" class="w-5 h-5 text-gloPurple-600"></i>
+            <span>Category 7: Paid Ads, Organizations & Subscription Plans</span>
+          </h3>
+          <span class="text-xs bg-gloPurple-100 text-gloPurple-700 px-3 py-1 rounded-full font-bold">Billing & Admin Architecture</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed text-slate-600">
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <h4 class="font-bold text-slate-900 text-sm">Full-Service Paid Ads Management</h4>
+              <p>100% of customer ad budget goes directly into ad spend. Glo3D charges a transparent <b>10% management fee</b> (significantly below 15–25% agency rates). Packages include Growth ($399, 1 platform), Scale ($699, unlimited), and Google Shopping ($399).</p>
+            </div>
+            <div class="space-y-1.5 pt-2">
+              <button onclick="openCinema('8vMk877Neek', 'Ep 4-7-1: Paid Ads Overview')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-7-1 Paid Ads Video</button>
+              <button onclick="openCinema('WbDWEZBYvVQ', 'Ep 4-7-2: Do it Yourself & Craigslist')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">Ep 4-7-2 Craigslist Ad Video</button>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <h4 class="font-bold text-slate-900 text-sm">Organizations & Multi-Rooftops (Chapter 4-8)</h4>
+              <p>Enables parent dealer groups to manage multiple rooftop accounts with Individual or Aggregated (parent consolidated bill) invoicing. Auto-sync syncs global settings, while One-Time Sync preserves local store customization. Sub-users cost $20/month per seat via SSO code.</p>
+            </div>
+            <button onclick="openCinema('SonAJZUpk_Q', 'Ep 4-8: Organization Management Overview')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
+              Watch Ep 4-8 Organization Video (SonAJZUpk_Q)
+            </button>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <h4 class="font-bold text-slate-900 text-sm">Inventory Limits & Flex Plans (Chapter 4-9 & 4-10)</h4>
+              <p>Default lot limit is <b>200 units</b>. Fixed-cost products (AI Bots, Auto-post) have $0 added cost for lot increases. Variable-cost products (Guided Photo, 360, Custom Backgrounds) scale with lot size. Discount codes capped at 30% on à la carte items.</p>
+            </div>
+            <button onclick="openCinema('BYJ-VS7uAQo', 'Ep 4-10-1: Glo3D Subscription Plan Overview')" class="w-full py-1.5 rounded bg-white border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100">
+              Watch Ep 4-10-1 Subscription Plan Video (BYJ-VS7uAQo)
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHAPTER 5: HOW TO PROSPECT ================= -->
+    <section id="ch5" class="searchable-section bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10 space-y-8">
+      <div class="border-b border-slate-200 pb-5">
+        <div class="flex items-center space-x-2 text-xs font-bold text-gloPurple-600 uppercase tracking-wider mb-1">
+          <i data-lucide="target" class="w-4 h-4"></i>
+          <span>Chapter 5: How to Prospect</span>
+        </div>
+        <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
+          High & Mid-Value Selling: Prospecting Playbook
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">Raymond's 4 fundamentals, state DMV active list scraping, and market segmentation.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs leading-relaxed">
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 lg:col-span-2 flex flex-col justify-between">
+          <div class="space-y-2">
+            <h3 class="font-bold text-base text-slate-900">Prospecting Methodology: The 4 Fundamentals</h3>
+            <ol class="space-y-1.5 list-decimal list-inside text-slate-600">
+              <li><strong>Build a Structured Pipeline:</strong> Structured prospecting drives clean forecasting and predictable closing rates.</li>
+              <li><strong>Define and Segment Your ICP:</strong> Avoid wasting time on unlicensed lots or seasonal dealers; prioritize lots with 50–200 cars.</li>
+              <li><strong>Map Key Vendors:</strong> Research the dealer's website provider (e.g. Dealer Center, CDK) before calling to pinpoint pain points.</li>
+              <li><strong>Leverage Targeted Outreach:</strong> Account-based cold calling with researched inventory metrics consistently outperforms random dials.</li>
+            </ol>
+          </div>
+          <button onclick="openCinema('XjU0m5Psg4I', 'Episode 5: High & Mid Value Selling')" class="py-2.5 px-4 rounded-xl bg-gloPurple-600 hover:bg-gloPurple-700 text-white font-bold transition flex items-center justify-center space-x-2">
+            <i data-lucide="play" class="w-4 h-4 fill-current"></i><span>Launch Episode 5 Prospecting Masterclass (XjU0m5Psg4I)</span>
+          </button>
+        </div>
+
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <h3 class="font-bold text-base text-slate-900">Market Segmentation</h3>
+          <div class="space-y-2 text-slate-600">
+            <div class="p-2.5 rounded bg-white border border-slate-200">
+              <strong class="text-slate-900 block">Tier 1: Independent Lots (0–90 units)</strong>
+              <span>Search state DMV active dealer lists. Short 1–3 day sales cycle with direct owner access.</span>
+            </div>
+            <div class="p-2.5 rounded bg-white border border-slate-200">
+              <strong class="text-slate-900 block">Tier 2: Mid-Market (100–250 units)</strong>
+              <span>Target General Managers (GMs) using local dealership references for social proof.</span>
+            </div>
+            <div class="p-2.5 rounded bg-white border border-slate-200">
+              <strong class="text-slate-900 block">Tier 3: Enterprise (500+ units)</strong>
+              <span>Target corporate executives via Apollo Access; 6–12 month sales cycle for multi-rooftops.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHAPTER 6: HOW TO SELL & BATTLECARD ================= -->
+    <section id="ch6" class="searchable-section bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10 space-y-8">
+      <div class="border-b border-slate-200 pb-5">
+        <div class="flex items-center space-x-2 text-xs font-bold text-gloPurple-600 uppercase tracking-wider mb-1">
+          <i data-lucide="trending-up" class="w-4 h-4"></i>
+          <span>Chapter 6: Closing & Direct Competition</span>
+        </div>
+        <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
+          Sales Principles, Sign-Up Protocol & Battlecard
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">Screen sign-up execution, post-sales handoff, and direct competitor battlecard teardowns.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <h3 class="font-bold text-base text-slate-900">Closing Episodes 6-1 to 6-5</h3>
+          <div class="space-y-2">
+            <button onclick="openCinema('HC3IgSXyXAI', 'Ep 6-1: Principles of Sales')" class="w-full p-2.5 bg-white hover:bg-gloPurple-50 rounded-lg border border-slate-200 text-left flex justify-between items-center transition">
+              <span class="font-semibold text-slate-800">Episode 6-1: Principles of Automotive Sales</span>
+              <i data-lucide="play" class="w-3.5 h-3.5 text-gloPurple-600"></i>
+            </button>
+            <button onclick="openCinema('78EU_se5SNw', 'Ep 6-2: How to sell Glo3D Products')" class="w-full p-2.5 bg-white hover:bg-gloPurple-50 rounded-lg border border-slate-200 text-left flex justify-between items-center transition">
+              <span class="font-semibold text-slate-800">Episode 6-2: How to Sell Glo3D Products</span>
+              <i data-lucide="play" class="w-3.5 h-3.5 text-gloPurple-600"></i>
+            </button>
+            <button onclick="openCinema('qMEXrlmVFjc', 'Ep 6-3: Sign-up Process')" class="w-full p-2.5 bg-white hover:bg-gloPurple-50 rounded-lg border border-slate-200 text-left flex justify-between items-center transition">
+              <span class="font-semibold text-slate-800">Episode 6-3: Sign-up on Dealer Screen (No CC on Phone)</span>
+              <i data-lucide="play" class="w-3.5 h-3.5 text-gloPurple-600"></i>
+            </button>
+            <button onclick="openCinema('abMRKIXZ1MU', 'Ep 6-4: Post Sales Steps')" class="w-full p-2.5 bg-white hover:bg-gloPurple-50 rounded-lg border border-slate-200 text-left flex justify-between items-center transition">
+              <span class="font-semibold text-slate-800">Episode 6-4: Post-Sales Steps & Support Handoff</span>
+              <i data-lucide="play" class="w-3.5 h-3.5 text-gloPurple-600"></i>
+            </button>
+            <button onclick="openCinema('6LPPhKN12tI', 'Ep 6-5: Onboarding & Integration')" class="w-full p-2.5 bg-white hover:bg-gloPurple-50 rounded-lg border border-slate-200 text-left flex justify-between items-center transition">
+              <span class="font-semibold text-slate-800">Episode 6-5: Onboarding & IMS Integration</span>
+              <i data-lucide="play" class="w-3.5 h-3.5 text-gloPurple-600"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-xl bg-gloPurple-50/50 border border-gloPurple-200 space-y-4 flex flex-col justify-between">
+          <div class="space-y-2">
+            <span class="text-[10px] font-mono font-bold text-gloPurple-700">EPISODE 6-6 // LIVE TOOL</span>
+            <h3 class="font-bold text-base text-slate-900">Direct Competition Live Portal</h3>
+            <p class="text-slate-600 leading-relaxed">
+              Access the live competition battlecard to evaluate hardware turntable costs, manual studio editing delays, and vendor pricing matrices against Glo3D's all-in-one software platform.
+            </p>
+          </div>
+          <a href="https://blakeatglo3d.github.io/directcompetition/" target="_blank" class="w-full py-3 rounded-xl bg-gloPurple-600 hover:bg-gloPurple-700 text-white font-bold transition flex items-center justify-center space-x-2 shadow-sm">
+            <i data-lucide="external-link" class="w-4 h-4"></i><span>Launch Direct Competition Portal</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHAPTER 7 & 8: AUDIO CASE STUDIES & TRAPS ================= -->
+    <section id="ch7" class="searchable-section bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10 space-y-8">
+      <div class="border-b border-slate-200 pb-5">
+        <div class="flex items-center space-x-2 text-xs font-bold text-gloPurple-600 uppercase tracking-wider mb-1">
+          <i data-lucide="phone-call" class="w-4 h-4"></i>
+          <span>Chapter 7 & 8: Call Vault & Traps</span>
+        </div>
+        <h2 class="font-['Plus_Jakarta_Sans'] font-extrabold text-2xl md:text-3xl text-slate-900">
+          Recorded Case Studies & Escaping Sales Rep Traps
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">Dissecting 3 bad calls vs. 3 championship closes, and avoiding fatal floor traps.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+        <!-- Bad Calls -->
+        <div class="p-5 rounded-xl bg-rose-50/50 border border-rose-200 space-y-3">
+          <div class="flex items-center space-x-2 text-rose-700 font-bold text-sm">
+            <i data-lucide="x-circle" class="w-4 h-4"></i>
+            <span>3 Bad Call Breakdowns (Mistakes to Avoid)</span>
+          </div>
+          <div class="space-y-2">
+            <div class="p-3 bg-white rounded-lg border border-rose-100 flex justify-between items-center">
+              <div><b class="text-slate-900 block">Bad Call #1</b><span class="text-slate-500">Rushing pitch without discovery</span></div>
+              <button onclick="openCinema('rimUAaouzIU', 'Case Study: Bad Call 1')" class="px-2.5 py-1 rounded bg-rose-100 hover:bg-rose-200 text-rose-800 font-semibold">Listen</button>
+            </div>
+            <div class="p-3 bg-white rounded-lg border border-rose-100 flex justify-between items-center">
+              <div><b class="text-slate-900 block">Bad Call #2</b><span class="text-slate-500">Fumbling price objections</span></div>
+              <button onclick="openCinema('KzhK06R7SGw', 'Case Study: Bad Call 2')" class="px-2.5 py-1 rounded bg-rose-100 hover:bg-rose-200 text-rose-800 font-semibold">Listen</button>
+            </div>
+            <div class="p-3 bg-white rounded-lg border border-rose-100 flex justify-between items-center">
+              <div><b class="text-slate-900 block">Bad Call #3</b><span class="text-slate-500">Overpromising features</span></div>
+              <button onclick="openCinema('ShlXM_P-Ys4', 'Case Study: Bad Call 3')" class="px-2.5 py-1 rounded bg-rose-100 hover:bg-rose-200 text-rose-800 font-semibold">Listen</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Good Calls -->
+        <div class="p-5 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-3">
+          <div class="flex items-center space-x-2 text-emerald-700 font-bold text-sm">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>3 Good Call Breakdowns (Winning Closes)</span>
+          </div>
+          <div class="space-y-2">
+            <div class="p-3 bg-white rounded-lg border border-emerald-100 flex justify-between items-center">
+              <div><b class="text-slate-900 block">Good Call #1</b><span class="text-slate-500">Flawless ICP qualification</span></div>
+              <button onclick="openCinema('B2wPtYov64g', 'Case Study: Good Call 1')" class="px-2.5 py-1 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold">Listen</button>
+            </div>
+            <div class="p-3 bg-white rounded-lg border border-emerald-100 flex justify-between items-center">
+              <div><b class="text-slate-900 block">Good Call #2</b><span class="text-slate-500">Handling 'email me info'</span></div>
+              <button onclick="openCinema('v2V0HFtRwck', 'Case Study: Good Call 2')" class="px-2.5 py-1 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold">Listen</button>
+            </div>
+            <div class="p-3 bg-white rounded-lg border border-emerald-100 flex justify-between items-center">
+              <div><b class="text-slate-900 block">Good Call #3</b><span class="text-slate-500">One-call screen sign-up</span></div>
+              <button onclick="openCinema('EjRKZFD7IZE', 'Case Study: Good Call 3')" class="px-2.5 py-1 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-semibold">Listen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Episode 8: Traps -->
+      <div class="p-6 rounded-xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+        <div class="space-y-1">
+          <span class="text-[10px] font-bold text-amber-400 uppercase font-mono">CHAPTER 8 // MANDATORY WATCH</span>
+          <h3 class="font-bold text-base text-white">Episode 8-1: 5 Top Sales Reps Traps</h3>
+          <p class="text-slate-300 max-w-2xl">Avoid pitching before discovery, chasing dead leads, discounting without approval, violating 21-day locks, and skipping daily HubSpot task queues.</p>
+        </div>
+        <button onclick="openCinema('wnWLMYCZJBQ', 'Episode 8-1: 5 top sales reps traps')" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold transition whitespace-nowrap">
+          Watch Traps Video (wnWLMYCZJBQ)
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-white border-t border-slate-200 py-8 px-4 text-center text-xs text-slate-500 space-y-2">
+    <div class="font-semibold text-slate-700">Glo3D.com Automotive Training Portal // Sales Academy</div>
+    <div>Build Version: v0.2 • International Sales Onboarding OS</div>
+  </footer>
+
+  <!-- ================= VIDEO CINEMA MODAL (WITH DIRECT ERROR 153 FALLBACK ENGINE) ================= -->
+  <div id="cinemaModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="relative w-full max-w-4xl bg-white rounded-2xl border border-slate-200 shadow-2xl p-5 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center space-x-2">
+          <div class="w-3 h-3 rounded-full bg-gloPurple-600"></div>
+          <h3 id="modalVideoTitle" class="font-bold text-slate-900 text-sm md:text-base">Video Training Module</h3>
+        </div>
+        <button onclick="closeCinema()" class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Video Aspect Container -->
+      <div class="video-aspect shadow-inner relative">
+        <iframe 
+          id="modalIframe" 
+          src="" 
+          title="Glo3D Player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <!-- Quick 1-Click Launch Bar -->
+      <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 pt-2 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+        <span class="inline-flex items-center space-x-1.5">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+          <span>If your browser blocks local file playback (Error 153), click the direct link:</span>
+        </span>
+        <a id="modalDirectLink" href="#" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-gloPurple-600 hover:bg-gloPurple-700 text-white font-bold inline-flex items-center space-x-1.5 transition shadow-sm">
+          <span>Watch Directly on YouTube</span>
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT ENGINE ================= -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Accordion Toggle for Modular Pricing Matrix
+    let isPricingExpanded = false;
+    function togglePricingAccordion() {
+      const content = document.getElementById('pricingAccordionContent');
+      const icon = document.getElementById('accordionIcon');
+      const statusText = document.getElementById('accordionStatusText');
+      const navBtnText = document.getElementById('navPricingBtnText');
+
+      isPricingExpanded = !isPricingExpanded;
+      if (isPricingExpanded) {
+        content.classList.add('expanded');
+        icon.style.transform = 'rotate(180deg)';
+        statusText.innerText = 'Click to Collapse';
+        navBtnText.innerText = 'Hide Matrix';
+      } else {
+        content.classList.remove('expanded');
+        icon.style.transform = 'rotate(0deg)';
+        statusText.innerText = 'Click to Expand';
+        navBtnText.innerText = 'Pricing Matrix';
+      }
+    }
+
+    // Video Player Engine with Robust Embed Handler
+    function openCinema(videoId, title) {
+      const modal = document.getElementById('cinemaModal');
+      const iframe = document.getElementById('modalIframe');
+      const titleEl = document.getElementById('modalVideoTitle');
+      const directLink = document.getElementById('modalDirectLink');
+
+      // Strip any extra playlist or URL parameters from raw ID
+      let cleanId = videoId;
+      if (cleanId.includes('?')) {
+        cleanId = cleanId.split('?')[0];
+      }
+      if (cleanId.includes('&')) {
+        cleanId = cleanId.split('&')[0];
+      }
+
+      titleEl.innerText = title;
+      iframe.src = 'https://www.youtube.com/embed/' + cleanId + '?autoplay=1';
+      directLink.href = 'https://www.youtube.com/watch?v=' + cleanId;
+      
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeCinema() {
+      const modal = document.getElementById('cinemaModal');
+      const iframe = document.getElementById('modalIframe');
+      iframe.src = "";
+      modal.classList.add('hidden');
+    }
+
+    // Escape Key Listener
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeCinema();
+    });
+
+    // Global Content Search
+    function searchContent() {
+      const query = document.getElementById('quickSearch').value.toLowerCase();
+      document.querySelectorAll('.searchable-section').forEach(section => {
+        const text = section.innerText.toLowerCase();
+        if (text.includes(query) || query === '') {
+          section.style.display = 'block';
+        } else {
+          section.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
